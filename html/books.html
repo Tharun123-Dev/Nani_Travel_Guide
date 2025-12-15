@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Books | Nani Travel</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<style>
+    body {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        background: #f7f7f7;
+    }
+
+    /* NAVBAR */
+    nav{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 50px;
+        background: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    nav .logo{
+        font-size: 25px;
+        font-weight: 700;
+        color: #0a3d62;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    nav .menu a{
+        margin: 0 18px;
+        font-size: 15px;
+        text-decoration: none;
+        color: #333;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+    nav .menu a:hover{
+        color: #0a3d62;
+    }
+
+    /* CART ICON */
+    .cart-icon{
+        position: relative;
+        font-size: 22px;
+        cursor: pointer;
+        color: #000;
+    }
+    .cart-count{
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: rgb(0, 81, 255);
+        color: white;
+        font-size: 12px;
+        padding: 2px 6px;
+        border-radius: 50%;
+    }
+
+    /* BOOK GRID */
+    .container{
+        width: 90%;
+        margin: auto;
+        padding-top: 40px;
+    }
+
+    .grid{
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 40px;
+    }
+
+    .book{
+        background: white;
+        padding: 15px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        transition: 0.3s;
+        text-align: center;
+    }
+    .book:hover{
+        transform: translateY(-8px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .book img{
+        width: 100%;
+        height: 260px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .book-title{
+        font-weight: 700;
+        font-size: 18px;
+        margin-top: 10px;
+        color: #333;
+    }
+
+    .price{
+        font-size: 16px;
+        font-weight: 600;
+        margin: 5px 0;
+        color: #0a3d62;
+    }
+
+    .add-btn{
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin-top: 10px;
+        border-radius: 25px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: 0.3s;
+        font-weight: 600;
+    }
+    .add-btn:hover{
+        background: #005ad1;
+        transform: scale(1.05);
+    }
+
+    /* MEDIA QUERIES */
+    @media(max-width:768px){
+        nav{
+            padding: 15px 20px;
+        }
+        nav .menu a{
+            margin: 0 10px;
+        }
+    }
+
+    @media(max-width:480px){
+        .book img{
+            height: 200px;
+        }
+        .add-btn{
+            width: 100%;
+        }
+    }
+
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <div class="logo">
+        <i class="bi bi-globe2"></i> Nani Travel
+    </div>
+
+    <div class="menu">
+       <a href="">DESTINATIONS</a>   
+        <a href="books.html">BOOKS</a>
+        <a href="#">TRIPS</a>
+        <a href="#">STORIES</a>
+    </div>
+
+    <div onclick="goToCart()" class="cart-icon">
+        <i class="bi bi-cart3"></i>
+        <span id="cartCount" class="cart-count">0</span>
+    </div>
+</nav>
+
+<!-- BOOK GRID -->
+<div class="container">
+    <div class="grid" id="booksGrid"></div>
+</div>
+
+<script>
+const books = [
+    { id: 1,  title: "Animal Championships", price: 1530, img: "../images/b1.webp" },
+    { id: 2,  title: "Argentina", price: 2295, img: "../images/b2.webp" },
+    { id: 3,  title: "Armchair Explorer", price: 1785, img: "../images/b3.webp" },
+    { id: 4,  title: "Around the World in 50 Ways", price: 1275, img: "../images/b4.webp" },
+    { id: 5,  title: "Art Destinations", price: 3570, img: "../images/b5.webp" },
+    { id: 6,  title: "Amsterdam Guide", price: 1785, img: "../images/b6.webp" },
+    { id: 7,  title: "Amsterdam City Map", price: 850, img: "../images/b7.webp" },
+    { id: 8,  title: "Ancient Wonders", price: 1530, img: "../images/b8.webp" },
+    { id: 9,  title: "Andalucia", price: 1955, img: "../images/b9.webp" },
+    { id: 10, title: "Animal Atlas", price: 1530, img: "../images/b10.webp" },
+    { id: 11, title: "Africa Travel Guide", price: 2295, img: "../images/b11.webp" },
+    { id: 12, title: "Africa Phrasebook", price: 935, img: "../images/b12.webp" },
+    { id: 13, title: "Africa Planning Map", price: 680, img: "../images/b13.webp" },
+    { id: 14, title: "Airports Board Book", price: 765, img: "../images/b14.webp" },
+    { id: 15, title: "Alaska Guide", price: 1955, img: "../images/b15.webp" },
+    { id: 16, title: "A Moveable Feast", price: 1190, img: "../images/b16.webp" },
+    { id: 17, title: "A Place Called Home", price: 1020, img: "../images/b17.webp" },
+    { id: 18, title: "A Time to Celebrate", price: 1020, img: "../images/b18.webp" },
+    { id: 19, title: "Traditional Tales", price: 1190, img: "../images/b19.webp" },
+    { id: 20, title: "Adventures Around the Globe", price: 1020, img: "../images/b20.webp" },
+    { id: 21, title: "Alphabet Atlas", price: 990, img: "../images/b21.webp" },
+    { id: 22, title: "Asia Travel Guide", price: 2100, img: "../images/b22.webp" },
+    { id: 23, title: "Australia Guide", price: 2500, img: "../images/b23.webp" },
+    { id: 24, title: "Amazing Worlds for Kids", price: 1300, img: "../images/b24.webp" },
+    { id: 25, title: "Arctic Expeditions", price: 1800, img: "../images/b25.webp" }
+];
+
+
+/* DISPLAY BOOKS */
+let booksGrid = document.getElementById("booksGrid");
+books.forEach(b=>{
+    booksGrid.innerHTML += `
+        <div class="book">
+            <img src="${b.img}">
+            <div class="book-title">${b.title}</div>
+            <div class="price">Rs. ${b.price}</div>
+            <button class="add-btn" onclick="addToCart(${b.id})">Add to Cart</button>
+        </div>
+    `;
+});
+
+/* CART SYSTEM USING LOCALSTORAGE */
+function getCart(){
+    return JSON.parse(localStorage.getItem("cart")) || [];
+}
+function saveCart(cart){
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+function updateCartCount(){
+    document.getElementById("cartCount").innerHTML = getCart().length;
+}
+updateCartCount();
+
+function addToCart(id){
+    let cart = getCart();
+    let item = books.find(b => b.id === id);
+    cart.push(item);
+    saveCart(cart);
+    updateCartCount();
+    alert(item.title + " added to cart!");
+}
+
+function goToCart(){
+    window.location.href = "cart.html";
+}
+</script>
+
+</body>
+</html>

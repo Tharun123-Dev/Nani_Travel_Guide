@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Guide to Dubai – Clone</title>
+  <style>
+    /* BASIC RESET */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #ffffff;
+      color: #222222;
+      line-height: 1.6;
+    }
+
+    a {
+      color: #0058a3;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* TOP NAVBAR */
+    header {
+      border-bottom: 1px solid #e0e0e0;
+      background-color: #ffffff;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .nav-bar {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-circle {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: #0058a3;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn-outline,
+    .btn-solid {
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 1px solid #222222;
+      font-size: 13px;
+      background-color: transparent;
+      cursor: pointer;
+    }
+
+    .btn-solid {
+      background-color: #222222;
+      color: #ffffff;
+      border-color: #222222;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      background-color: #f4f4f4;
+      padding: 40px 0 24px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .hero-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .breadcrumb {
+      font-size: 11px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: #555555;
+      margin-bottom: 18px;
+    }
+
+    .hero-title {
+      font-size: 40px;
+      line-height: 1.15;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: #555555;
+      margin-bottom: 10px;
+    }
+
+    .author-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #cccccc;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .chip {
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1px solid #cccccc;
+      font-size: 12px;
+      background-color: #ffffff;
+      cursor: pointer;
+    }
+
+    /* MAIN IMAGE */
+    .hero-image-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px 40px;
+    }
+
+    .hero-image {
+      width: 100%;
+      max-height: 420px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ARTICLE + SIDEBAR */
+    .page-wrapper {
+      max-width: 1100px;
+      margin: 0 auto 40px;
+      padding: 0 20px;
+      display: flex;
+      gap: 32px;
+    }
+
+    .article-main {
+      flex: 3;
+    }
+
+    .sidebar {
+      flex: 1;
+    }
+
+    .sidebar img {
+      width: 100%;
+      display: block;
+    }
+
+    .sidebar-label {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #888888;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .article-main p {
+      margin-bottom: 16px;
+      font-size: 15px;
+      color: #333333;
+    }
+
+    .article-main h2 {
+      margin: 36px 0 16px;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .article-main h3 {
+      margin: 20px 0 4px;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .inline-link {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    /* FULL WIDTH IMAGE SECTION */
+    .full-image-section {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .full-image-section img {
+      width: 100%;
+      display: block;
+    }
+
+    .caption {
+      font-size: 12px;
+      color: #777777;
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    /* BOOKS STRIP */
+    .books-section {
+      background-color: #f4f4f4;
+      padding: 40px 0;
+      margin-top: 20px;
+    }
+
+    .books-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .books-title {
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 26px;
+    }
+
+    .books-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .books-top-row a {
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 24px;
+    }
+
+    .book-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      margin-bottom: 10px;
+      background-color: #dddddd;
+    }
+
+    .book-meta {
+      font-size: 11px;
+      color: #777777;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .book-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      border-bottom: 1px solid #000;
+      padding-bottom: 6px;
+    }
+
+    /* FOOTER */
+    footer {
+      background-color: #111111;
+      color: #ffffff;
+      margin-top: 40px;
+      padding: 40px 0 20px;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .footer-top {
+      display: flex;
+      gap: 60px;
+      margin-bottom: 30px;
+      align-items: flex-start;
+    }
+
+    .footer-brand {
+      flex: 1;
+    }
+
+    .footer-logo {
+      font-size: 22px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .footer-logo-circle {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: #ffffff;
+    }
+
+    .footer-brand small {
+      font-size: 11px;
+      color: #bbbbbb;
+    }
+
+    .footer-columns {
+      flex: 3;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+      font-size: 13px;
+    }
+
+    .footer-columns h4 {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .footer-columns ul {
+      list-style: none;
+    }
+
+    .footer-columns li {
+      margin-bottom: 6px;
+    }
+
+    .newsletter {
+      margin-top: 24px;
+      max-width: 320px;
+    }
+
+    .newsletter h4 {
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+
+    .newsletter p {
+      font-size: 13px;
+      margin-bottom: 10px;
+      color: #cccccc;
+    }
+
+    .newsletter input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 4px;
+      border: none;
+      margin-bottom: 10px;
+    }
+
+    .newsletter button {
+      padding: 8px 18px;
+      border-radius: 20px;
+      border: 1px solid #ffffff;
+      background-color: transparent;
+      color: #ffffff;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid #333333;
+      margin-top: 20px;
+      padding-top: 10px;
+      font-size: 11px;
+      color: #aaaaaa;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .lang-select {
+      background-color: #222222;
+      color: #ffffff;
+      border-radius: 20px;
+      border: 1px solid #555555;
+      padding: 6px 12px;
+      font-size: 11px;
+    }
+
+    /* SIMPLE RESPONSIVE */
+    @media (max-width: 900px) {
+      .page-wrapper {
+        flex-direction: column;
+      }
+      .books-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .footer-top {
+        flex-direction: column;
+      }
+      .footer-columns {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hero-title {
+        font-size: 30px;
+      }
+      .books-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-columns {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER / NAV -->
+  <header>
+    <div class="nav-bar">
+      <div class="logo">
+        <div class="logo-circle"></div>
+        <span>NANI planner</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#">Destinations</a>
+        <a href="#">Books</a>
+        <a href="#">Trips</a>
+        <a href="#">Stories</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="btn-outline">Cart</button>
+        <button class="btn-solid">Sign in</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO TEXT -->
+   <img src="../images/dubaibig.avif" alt="" style="width: 70%; margin-left: 200px;">
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="breadcrumb">TRAVEL STORIES &gt; UNITED ARAB EMIRATES &gt; DUBAI</div>
+      <h1 class="hero-title">A guide to Dubai, everything you need to know</h1>
+      <div class="hero-meta">
+        <div class="author-avatar"></div>
+        <div>
+          <div><strong>nani</strong></div>
+          <div>Oct 22, 2025 · 7 min read</div>
+        </div>
+      </div>
+      <div class="hero-buttons">
+        <button class="chip">Save</button>
+        <button class="chip">Share</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN HERO IMAGE -->
+  <div class="hero-image-wrapper">
+    <img src="../images/dubaibig.avif" alt="Dubai skyline" class="hero-image">
+  </div>
+
+  <!-- ARTICLE + SIDEBAR -->
+  <div class="page-wrapper">
+    <main class="article-main">
+      <p>
+        Famous for its record‑breaking skyscrapers, five‑star hotels, beach clubs and mega malls, Dubai mixes these elements into a glamorous coastal city break.
+      </p>
+      <p>
+        Regular visitors include serious shoppers, sun worshippers and those who want a taste of the luxury lifestyle.
+        Dubai is also a magnet for families, with an abundance of kid‑friendly activities and theme parks.
+      </p>
+
+      <h2>WHEN TO GO TO DUBAI</h2>
+      <p>
+        With year‑round sunshine, the main season runs from November to April when the weather is warm and pleasant.
+        In summer the heat is intense, but many attractions are indoors in air‑conditioned malls and resorts.
+      </p>
+
+      <h2>HOW MUCH TIME SHOULD I SPEND?</h2>
+      <p>
+        First‑time visitors usually spend one or two weeks enjoying beaches, malls and desert experiences.
+        A shorter stay is enough for a quick city break focused on Downtown Dubai and the coast.
+      </p>
+
+      <h2>IS IT EASY TO GET IN AND AROUND DUBAI?</h2>
+      <p>
+        Dubai International is the main airport, with most neighborhoods 20–45 minutes away by car.
+        Public transport includes the metro, tram, monorail, buses and boats, making it easy to move around the city.
+      </p>
+
+      <h2>TOP 5 THINGS TO DO IN DUBAI</h2>
+      <h3>Hatta Mountains</h3>
+      <p>Take a day trip to the Hatta Mountains for hiking, fresh air and striking desert scenery.</p>
+
+      <h3>Desert safari</h3>
+      <p>Join a desert safari for dune‑bashing, camel rides and stargazing in the sand.</p>
+
+      <h3>Aquaventure</h3>
+      <p>Visit a major water park for record‑breaking slides and warm‑weather fun.</p>
+
+      <h3>On the water</h3>
+      <p>Try stand‑up paddleboarding or take a boat trip along the Arabian Gulf.</p>
+
+      <h3>Art galleries</h3>
+      <p>Explore creative districts filled with galleries, concept stores and cafes.</p>
+
+      <h2>TOP LOCAL TIPS</h2>
+      <h3>Respect the local culture</h3>
+      <p>Dress modestly away from beaches and avoid rude language or gestures in public.</p>
+
+      <h3>Don’t drink alcohol in public</h3>
+      <p>Alcohol is limited to licensed venues; public drinking on the street or beach is not allowed.</p>
+
+      <h3>Don’t photograph people without consent</h3>
+      <p>Always ask before taking photos of individuals, especially families.</p>
+
+      <h3>Don’t eat or drink on the metro</h3>
+      <p>Food and drink are not permitted inside metro trains and stations.</p>
+    </main>
+
+    <aside class="sidebar">
+      <div class="sidebar-label">ADVERTISEMENT</div>
+      <img src="../images/dub1.avif" alt="Resort advertisement">
+    </aside>
+  </div>
+
+  <!-- EXAMPLE FULL WIDTH IMAGE -->
+  <section class="full-image-section">
+    <img src="../images/dub2.avif" alt="Dubai marina">
+    <div class="caption">Dubai waterfront at sunset.</div>
+  </section>
+
+  <!-- BOOKS STRIP -->
+  <section class="books-section">
+    <div class="books-inner">
+      <div class="books-top-row">
+        <h2 class="books-title">Get a book. Get inspired. Get exploring.</h2>
+        <a href="#">Explore all books</a>
+      </div>
+
+      <div class="books-grid">
+        <div class="book-card">
+          <img src="../images/dub3.avif" alt="Book 1">
+          <div class="book-meta">Guide</div>
+          <div class="book-title">Dubai &amp; Abu Dhabi</div>
+        </div>
+        <div class="book-card">
+          <img src="../images/dub4.avif" alt="Book 2">
+          <div class="book-meta">Guide</div>
+          <div class="book-title">Pocket Dubai</div>
+        </div>
+        <div class="book-card">
+          <img src="../images/dub1.avif" alt="Book 3">
+          <div class="book-meta">Guide</div>
+          <div class="book-title">Best in Travel</div>
+        </div>
+        <div class="book-card">
+          <img src="../images/dub5.avif" alt="Book 4">
+          <div class="book-meta">Guide</div>
+          <div class="book-title">Dream Trips</div>
+        </div>
+        <div class="book-card">
+          <img src="../images/dub7.avif" alt="Book 5">
+          <div class="book-meta">Guide</div>
+          <div class="book-title">Where to Go With Kids</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="footer-logo-circle"></div>
+            <span>lonely planet</span>
+          </div>
+          <small>OUR GUIDES. YOUR STORIES.</small>
+
+          <div class="newsletter">
+            <h4>Join our Newsletter</h4>
+            <p>Get exclusive discounts and more travel inspiration.</p>
+            <input type="email" id="email" placeholder="EMAIL ADDRESS">
+            <button onclick="signupNewsletter()">Sign up</button>
+          </div>
+        </div>
+
+        <div class="footer-columns">
+          <div>
+            <h4>Top destinations</h4>
+            <ul>
+              <li><a href="#">New York City</a></li>
+              <li><a href="#">Paris</a></li>
+              <li><a href="#">Japan</a></li>
+              <li><a href="#">USA</a></li>
+              <li><a href="#">London</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Travel interests</h4>
+            <ul>
+              <li><a href="#">Adventure travel</a></li>
+              <li><a href="#">Beaches &amp; coasts</a></li>
+              <li><a href="#">Family holidays</a></li>
+              <li><a href="#">Road trips</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Shop</h4>
+            <ul>
+              <li><a href="#">Destination guides</a></li>
+              <li><a href="#">Kids</a></li>
+              <li><a href="#">Travel accessories</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>About us</h4>
+            <ul>
+              <li><a href="#">About Nani Travel Planner</a></li>
+              <li><a href="#">Contact us</a></li>
+              <li><a href="#">Privacy policy</a></li>
+              <li><a href="#">Terms &amp; conditions</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2025 Nani travel planner.</span>
+        <select class="lang-select">
+          <option>Language: English</option>
+          <option>Language: Hindi</option>
+        </select>
+      </div>
+    </div>
+  </footer>
+
+  <!-- VERY SMALL JS FOR DEMO -->
+  <script>
+    function signupNewsletter() {
+      const email = document.getElementById("email").value.trim();
+      if (!email) {
+        alert("Please enter your email address.");
+      } else {
+        alert("Thanks for signing up, " + email + "!");
+      }
+    }
+  </script>
+</body>
+</html>

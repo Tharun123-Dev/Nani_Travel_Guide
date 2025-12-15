@@ -1,0 +1,49 @@
+.dream-trip {
+    background: #efefef;
+    width: 100%;
+}
+
+.trip-card img {
+    height: 350px;
+    object-fit: cover;
+}
+
+.trip-scroll {
+    overflow-x: auto;
+    scroll-behavior: smooth;
+}
+
+.trip-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+.trip-scroll::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+/* ARROWS */
+.arrow-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.arrow-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    border: none;
+    background: black;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.arrow-btn:hover {
+    background: #333;
+}
+.slide{
+    width: 85%;
+    margin: auto;
+    
+}

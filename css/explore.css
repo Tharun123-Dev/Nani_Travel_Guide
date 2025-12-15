@@ -1,0 +1,77 @@
+/* Entire section background */
+.winter-section {
+    background: #d9d6d1;   /* same light grey as LonelyPlanet */
+    padding: 80px 0;
+}
+
+/* Center container */
+.winter-container {
+    width: 85%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 60px;
+}
+
+/* LEFT TEXT */
+.sub-title {
+    letter-spacing: 2px;
+    font-size: 14px;
+}
+
+.winter-title {
+    font-size: 55px;
+    font-weight: 900;
+    margin: 15px 0;
+}
+
+.winter-description {
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 30px;
+    max-width: 500px;
+}
+
+/* EXPLORE BUTTON */
+.explore-btn {
+    background: #000;
+    color: #fff;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.explore-btn:hover {
+    background: #333;
+}
+
+/* RIGHT IMAGE */
+.winter-image img {
+    width: 500px;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* ==========================
+     RESPONSIVE
+============================= */
+
+@media (max-width: 900px) {
+    .winter-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .winter-description {
+        margin: auto;
+    }
+
+    .winter-image img {
+        width: 100%;
+        margin-top: 25px;
+    }
+}

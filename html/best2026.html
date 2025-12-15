@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Best Travel Places — 2025 & 2026</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --accent:#0f6bff;
+      --muted:#6b7280;
+      --radius:14px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,var(--bg),#eef2ff);
+      color:#111827;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    header{
+      padding:28px 20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      max-width:1100px;
+      margin:0 auto;
+    }
+
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .logo{
+      width:56px;
+      height:56px;
+      background:linear-gradient(135deg,var(--accent),#6c5cff);
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      font-weight:700;
+      box-shadow:0 6px 18px rgba(15,107,255,0.14);
+      font-size:18px;
+    }
+    h1{margin:0;font-size:20px}
+    p.lead{margin:4px 0 0;color:var(--muted);font-size:13px}
+
+    nav a{
+      text-decoration:none;
+      color:var(--accent);
+      font-weight:600;
+      border:1px solid transparent;
+      padding:8px 12px;
+      border-radius:10px;
+    }
+
+    main{
+      max-width:1100px;
+      margin:18px auto 80px;
+      padding:0 20px;
+    }
+
+    .intro{
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow:0 8px 30px rgba(15,20,40,0.04);
+      display:flex;
+      gap:18px;
+      align-items:flex-start;
+      margin-bottom:18px;
+    }
+    .intro img{
+      width:140px;
+      height:100px;
+      object-fit:cover;
+      border-radius:10px;
+      flex-shrink:0;
+    }
+    .intro .txt h2{margin:0;font-size:18px}
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+      gap:18px;
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:16px;
+      overflow:hidden;
+      transition:transform .22s ease, box-shadow .22s ease;
+      box-shadow:0 8px 22px rgba(13,17,30,0.04);
+      display:flex;
+      flex-direction:column;
+      min-height:360px;
+    }
+    .card:hover{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(13,17,30,0.09);}
+
+    .card img{
+      width:100%;
+      height:180px;
+      object-fit:cover;
+      display:block;
+    }
+    .card-content{
+      padding:14px;
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .card h3{margin:0;font-size:16px}
+    .meta{color:var(--muted);font-size:13px}
+    .desc{flex:1;color:#334155;font-size:14px;line-height:1.45}
+    .btn-row{display:flex;gap:10px;margin-top:10px}
+    .btn{
+      padding:8px 10px;border-radius:10px;border:none;cursor:pointer;font-weight:600;
+      background:linear-gradient(90deg,var(--accent),#6c5cff);color:white;
+      box-shadow:0 8px 20px rgba(15,107,255,0.12);
+      font-size:13px;
+    }
+    .outline{background:transparent;border:1px solid #e6e9f2;color:var(--accent);box-shadow:none}
+
+    footer{
+      max-width:1100px;margin:22px auto 40px;padding:18px 20px;color:var(--muted);font-size:13px;
+      display:flex;justify-content:space-between;align-items:center;gap:16px;
+    }
+
+    /* simple modal */
+    .modal{
+      position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+      background:rgba(2,6,23,0.6);z-index:1200;padding:20px;
+    }
+    .modal.open{display:flex}
+    .modal img{max-width:95%;max-height:85%;border-radius:12px;box-shadow:0 20px 60px rgba(2,6,23,0.6);}
+    @media (max-width:520px){
+      .intro{flex-direction:column;align-items:flex-start}
+      .intro img{width:100%;height:160px;border-radius:12px}
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="logo">TR</div>
+      <div>
+        <h1>Nani Travel — Top Picks</h1>
+        <p class="lead">Recommended travel spots to watch in 2025 & 2026 — guides, culture, beaches, and natural wonders.</p>
+      </div>
+    </div>
+
+    <nav>
+      <a href="#destinations">Destinations</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="intro">
+      <img src="../images/travel.jpg" alt="travel collage">
+      <div class="txt">
+        <h2>Why these picks?</h2>
+        <p class="meta">Curated from major travel roundups and trend reports (Lonely Planet, Travel+Leisure, Google/Skyscanner trends). Each card below includes a short trip idea and a photo — click any image to enlarge.</p>
+      </div>
+    </section>
+
+    <section id="destinations" class="grid">
+      <!-- Kyoto / Japan -->
+      <article class="card">
+        <img src="../images/kyoto.jpg" alt="Kyoto, Japan" onclick="openModal(this.src, 'Kyoto, Japan')">
+        <div class="card-content">
+          <h3>Kyoto — Japan (2025)</h3>
+          <div class="meta">Culture & temples • easy city-to-nature day trips</div>
+          <p class="desc">Autumn leaves, thousand torii gates and world-class food make Kyoto a top choice for culture seekers. Combine with Osaka or Hiroshima for a full Kansai trip.</p>
+          <div class="btn-row">
+            <button class="btn" onclick="location.href='#'">Read tips</button>
+            <button class="btn outline" onclick="alert('Save this destination to your travel list!')">Save</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Lisbon / Portugal -->
+      <article class="card">
+        <img src="../images/lisbon.jpg" alt="Lisbon, Portugal" onclick="openModal(this.src, 'Lisbon, Portugal')">
+        <div class="card-content">
+          <h3>Lisbon — Portugal</h3>
+          <div class="meta">History • cliffs & coastline • multi-city feed</div>
+          <p class="desc">Warm, walkable streets, pastel buildings and great seafood. Lisbon is a gateway to Algarve beaches and day trips to Sintra's palaces.</p>
+          <div class="btn-row">
+            <button class="btn" onclick="location.href='#'">Read tips</button>
+            <button class="btn outline" onclick="alert('Saved Lisbon!')">Save</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- New Zealand -->
+      <article class="card">
+        <img src="../images/newze.jpg" alt="New Zealand" onclick="openModal(this.src, 'New Zealand')">
+        <div class="card-content">
+          <h3>New Zealand</h3>
+          <div class="meta">Epic landscapes • outdoor adventures</div>
+          <p class="desc">From fiords to volcanic deserts, NZ remains a top nature destination for hiking, kayaking and starry-night escapes — perfect for active travelers.</p>
+          <div class="btn-row">
+            <button class="btn" onclick="location.href='#'">Read tips</button>
+            <button class="btn outline" onclick="alert('Saved New Zealand!')">Save</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Iceland -->
+      <article class="card">
+        <img src="../images/iceland.jpg" alt="Iceland" onclick="openModal(this.src, 'Iceland')">
+        <div class="card-content">
+          <h3>Iceland</h3>
+          <div class="meta">Northern lights • dramatic coasts</div>
+          <p class="desc">Geothermal pools, volcanic landscapes and the aurora borealis — Iceland is ideal for photographers and nature lovers seeking otherworldly scenery.</p>
+          <div class="btn-row">
+            <button class="btn" onclick="location.href='#'">Read tips</button>
+            <button class="btn outline" onclick="alert('Saved Iceland!')">Save</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Peru / Machu Picchu -->
+      <article class="card">
+        <img src="../images/peru.jpg" alt="Machu Picchu, Peru" onclick="openModal(this.src, 'Machu Picchu, Peru')">
+        <div class="card-content">
+          <h3>Machu Picchu — Peru</h3>
+          <div class="meta">Ancient ruins • Andean treks</div>
+          <p class="desc">Combine the Inca Trail or shorter hikes with Cusco's markets and Peruvian cuisine for a cultural-highland experience.</p>
+          <div class="btn-row">
+            <button class="btn" onclick="location.href='#'">Read tips</button>
+            <button class="btn outline" onclick="alert('Saved Machu Picchu!')">Save</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Santorini / Greece -->
+      <article class="card">
+        <img src="../images/greece.jpg" alt="Santorini, Greece" onclick="openModal(this.src, 'Santorini, Greece')">
+        <div class="card-content">
+          <h3>Santorini — Greece</h3>
+          <div class="meta">Sunset views • island life</div>
+          <p class="desc">Iconic sunsets, volcanic beaches and cliffside villages. Great for a romantic getaway or island-hopping itinerary in the Aegean.</p>
+          <div class="btn-row">
+            <button class="btn" onclick="location.href='#'">Read tips</button>
+            <button class="btn outline" onclick="alert('Saved Santorini!')">Save</button>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div>© <strong>Nani Travel</strong> — curated picks for 2025 & 2026</div>
+    <div>Sources: Lonely Planet · Travel + Leisure · trend reports</div>
+  </footer>
+
+  <!-- modal -->
+  <div id="imgModal" class="modal" onclick="closeModal()">
+    <img id="modalImg" src="" alt="enlarged image">
+  </div>
+
+  <script>
+    // Minimal JS: modal image preview & smooth scroll
+    function openModal(src, alt){
+      const modal = document.getElementById('imgModal');
+      const mimg = document.getElementById('modalImg');
+      mimg.src = src;
+      mimg.alt = alt || 'photo';
+      modal.classList.add('open');
+    }
+    function closeModal(){
+      const modal = document.getElementById('imgModal');
+      modal.classList.remove('open');
+      // small delay to clear src to reduce memory on mobile
+      setTimeout(()=> document.getElementById('modalImg').src = '', 300);
+    }
+    // smooth scroll for internal nav
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', e=>{
+        e.preventDefault();
+        const t = document.querySelector(a.getAttribute('href'));
+        if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
+      });
+    });
+  </script>
+</body>
+</html>

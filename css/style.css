@@ -1,0 +1,418 @@
+/* =======================================
+   GLOBAL RESET
+======================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    /* font-family: "Poppins", sans-serif; */
+    background: #fff;
+    width: 100% !important;
+}
+
+
+/* =======================================
+   NAVBAR HOVER EFFECTS
+======================================= */
+.nav-link {
+    font-size: 50px;
+    letter-spacing: 0.5px;
+    transition: 0.2s ease-in-out;
+    margin-left: 10px;
+}
+
+.nav-link:hover {
+    color: #0071b3 !important;
+    transform: translateY(-1px);
+}
+
+/* CART + SEARCH ICON FIX */
+.navbar a {
+    text-decoration: none;
+}
+.nav-item{
+    margin:auto;
+    margin-left: 10px;
+
+}
+.fw-bold{
+    margin-right: 120px;
+}
+
+/* =======================================
+   HERO SECTION (FULLSCREEN IMAGE)
+======================================= */
+.hero-section {
+    height: 95vh;                               /* tall hero like Lonely Planet */
+    background: url('../images/wallpaper.jpg') no-repeat center center;
+    background-size: cover;                     /* make image fit screen */
+    display: flex;
+    align-items: center;
+    padding-top: 120px;                         /* space for navbar */
+    color: #fff;
+}
+
+
+/* =======================================
+   BLUE TITLE BOX
+======================================= */
+.blue-box {
+    background: #0057D8;
+    display: inline-block;
+    padding: 25px 35px;
+    margin-bottom: -20px;
+    margin-left: 210px;
+     border: 2px solid black;
+
+}
+
+.hero-title {
+    color: white;
+    font-size: 60px;
+    font-weight: 900;
+    line-height: 1.1;
+  
+}
+
+
+/* =======================================
+   SEARCH BAR STYLE (LIKE LONELY PLANET)
+======================================= */
+.search-box {
+    width: 60%;
+    background: white;
+    border: 2px solid black;
+    display: flex;
+    margin-top: 20px;
+    max-width: 650px;
+    margin-left: 200px;
+}
+
+.search-input {
+    border: none;
+    padding: 15px;
+    border-radius: 0;
+    font-size: 15px;
+}
+
+.search-btn {
+    background: transparent;
+    border: none;
+    padding: 10px 20px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.search-note {
+    font-size: 14px;
+    color: #1e1e1e;
+    margin-top: 20px;
+     margin-left: 200px;
+}
+.cart-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    color: #000;
+    font-weight: 600;
+    position: relative;
+    cursor: pointer;
+}
+
+.cart-link i {
+    font-size: 20px;
+}
+
+#cart-count {
+    background: #0d6efd;
+    color: white;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: 4px;
+}
+
+
+
+/* ================================
+   Small Mobiles
+================================ */
+@media (max-width: 480px) {
+
+    /* NAVBAR HEIGHT */
+    .navbar {
+        padding-top: 20px !important;
+        padding-bottom: 20px !important;
+        min-height: 90px !important;
+     
+    }
+    .navbar-brand{
+       width:80%;
+    }
+    .navbar-toggler{
+        margin-left: 240px !important;
+        margin-top: -50px !important;
+    }
+
+    /* LOGO */
+    .navbar-brand img {
+        height: 40px !important;
+    }
+
+    .navbar-brand span {
+        font-size: 20px !important;
+    }
+
+    /* NAV LINKS */
+    .nav-link {
+        font-size: 18px !important;
+        padding: 8px 0 !important;
+    }
+
+    /* SIGN IN BUTTON */
+    .navbar .btn {
+        font-size: 14px !important;
+        padding: 8px 20px !important;
+    }
+
+    /* SEARCH BOX (CENTER) */
+    .search-box {
+        width: 90% !important;
+        margin: 10px auto !important;
+        margin-left: 0px !important;
+    }
+
+    /* BLUE BOX LEFT */
+    .blue-box {
+        text-align: left;
+        display: inline-block;
+        margin: 0 !important;
+        padding: 18px 20px;
+        
+    }
+
+    /* HERO TITLE */
+    .hero-title {
+        font-size: 28px;
+        line-height: 1.2;
+    }
+    .search-note {
+        margin-left: 0px !important;
+        text-align: center;
+    }
+}
+
+/* ==================== BESTSELLER STRIP ==================== */
+.bestseller-strip {
+    position: absolute;
+    right: 0;
+    bottom: 40px;
+    width: 360px;
+    background: #ffcc00;
+    border-radius: 12px 0 0 12px;
+    overflow: hidden;
+    border: 1px solid #000;
+    z-index: 100;
+}
+
+/* MARQUEE TEXT */
+.marquee {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 8px 0;
+    background: #ffcc00;
+}
+
+.marquee span {
+    display: inline-block;
+    font-weight: bolder;
+    font-size: 20px;
+    animation: marqueeMove 10s linear infinite;
+}
+
+@keyframes marqueeMove {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+/* ==================== OPEN BUTTON ==================== */
+.open-panel-btn {
+    width: 100%;
+    padding: 20px;
+    background: #003fad;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 0 0 0 12px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.open-panel-btn:hover {
+    background: #002b78;
+}
+
+/* ==================== SLIDE PANEL ==================== */
+.slide-panel {
+    position: fixed;
+    right: -100%;
+    top: 0;
+    height: 100vh;
+    width: 55%;
+    background: #003fad;
+    color: white;
+    padding: 40px;
+    transition: 0.5s ease;
+    z-index: 999999;
+}
+
+.slide-panel.active {
+    right: 0;
+}
+
+/* ==================== CLOSE BUTTON ==================== */
+.close-panel-btn {
+    background: none;
+    border: none;
+    font-size: 40px;
+    color: white;
+    float: right;
+    cursor: pointer;
+}
+
+/* ==================== PANEL CONTENT ==================== */
+.panel-content {
+    display: flex;
+    gap: 30px;
+    margin-top: 60px;
+}
+
+.panel-img {
+    width: 45%;
+    border-radius: 12px;
+}
+
+.panel-text h2 {
+    font-size: 34px;
+    font-weight: 800;
+}
+
+.panel-text h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.details-btn {
+    background: white;
+    color: black;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.price {
+    margin: 15px 0;
+    font-size: 20px;
+}
+/* ===================== TABLETS (up to 768px) ===================== */
+@media (max-width: 768px) {
+
+    .bestseller-strip {
+        width: 260px;
+        bottom: 20px;
+    }
+
+    .slide-panel {
+        width: 80%;
+    }
+
+    .panel-img {
+        width: 60%;
+        margin: auto;
+    }
+
+    .panel-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .panel-text h2 {
+        font-size: 26px;
+    }
+}
+
+
+/* ===================== MOBILE (up to 480px) ===================== */
+@media (max-width: 480px) {
+
+    /* Bestseller strip in correct place */
+    .bestseller-strip {
+        width: 200px;
+        bottom: -30px;
+        right:100px ;
+        border-radius: 10px 0 0 10px;
+    }
+
+    /* Marquee text smaller */
+    .marquee span {
+        font-size: 12px;
+    }
+
+    /* Open button small */
+    .open-panel-btn {
+        padding: 12px;
+        font-size: 13px;
+        text-align: center;
+    }
+
+    /* Slide panel takes full width */
+    .slide-panel {
+        width: 100%;
+        padding: 25px;
+    }
+
+    /* Column layout in panel */
+    .panel-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        text-align: center;
+    }
+
+    /* Full width image */
+    .panel-img {
+        width: 90%;
+    }
+
+    /* Text smaller */
+    .panel-text h2 {
+        font-size: 22px;
+    }
+
+    .panel-text h3 {
+        font-size: 16px;
+    }
+
+    .price {
+        font-size: 18px;
+    }
+
+    .details-btn {
+        padding: 10px 18px;
+        font-size: 14px;
+    }
+
+
+
+   
+
+}
+

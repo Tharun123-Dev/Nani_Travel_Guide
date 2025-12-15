@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gift Guide — Full Static Demo (Improved & Responsive)</title>
+
+  <!-- Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================
+       Base variables & reset
+       ========================== */
+    :root{
+      --max-width:1300px;
+      --accent:#f5c900;
+      --muted:#7a7a7a;
+      --dark:#111;
+      --card-shadow: 0 14px 40px rgba(12,12,12,0.08);
+      --gap:28px;
+      --card-w: 260px;       /* default desktop card width */
+      --card-img-h: 330px;   /* default image height inside cards */
+      --hero-right-w: 480px; /* default hero right width */
+      --page-pad:22px;
+      --title-size:34px;
+      --base-font:16px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      font-family:'Poppins',sans-serif;
+      margin:0;
+      color:var(--dark);
+      background:#fff;
+      -webkit-font-smoothing:antialiased;
+      font-size:var(--base-font);
+    }
+    a{color:inherit;text-decoration:none}
+    .container{max-width:var(--max-width);margin:0 auto;padding:var(--page-pad)}
+
+    /* Topbar */
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid #eee}
+    .logo{font-weight:700;color:#0b66c2;font-size:22px}
+    .nav-right{display:flex;gap:18px;align-items:center;color:var(--muted);font-weight:500}
+
+    /* HERO GRID */
+    .hero-grid{display:grid;grid-template-columns:1fr var(--hero-right-w);gap:30px;padding:30px 0;align-items:center}
+    .hero-left img, .hero-right img{
+      width:100%;height:420px;object-fit:cover;border-radius:8px;display:block;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+    }
+
+    /* SECTION STRUCTURE */
+    .section{padding:34px 0;border-top:1px solid #fafafa}
+    .section .section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+    .section .title{max-width:880px}
+    h2{font-size:var(--title-size);margin:0;font-weight:700}
+    p.lead{margin:8px 0 0;color:var(--muted);font-weight:300}
+
+    /* CAROUSEL */
+    .carousel-wrap{position:relative;margin-top:18px}
+    .carousel{
+      display:flex;
+      gap:var(--gap);
+      overflow-x:auto;
+      padding-bottom:14px;
+      scroll-behavior:smooth;
+      -webkit-overflow-scrolling:touch;
+    }
+    .carousel:focus{outline:3px solid rgba(0,120,255,0.06)}
+    .carousel::-webkit-scrollbar{height:10px}
+    .carousel::-webkit-scrollbar-thumb{background:#eee;border-radius:10px}
+
+    /* CARD */
+    .card{
+      flex:0 0 var(--card-w);
+      min-width:var(--card-w);
+      background:#fff;border-radius:8px;padding:10px;
+      box-shadow:var(--card-shadow);position:relative;
+      transition:transform .18s ease;
+    }
+    .card:hover{transform:translateY(-6px)}
+    .card img{width:100%;height:var(--card-img-h);object-fit:cover;border-radius:6px;display:block}
+    .sticker{position:absolute;left:14px;top:-14px;background:var(--accent);padding:6px 12px;font-weight:700;font-size:12px;transform:rotate(-6deg);box-shadow:0 8px 18px rgba(0,0,0,0.08)}
+    .meta{padding:12px 6px}
+    .meta .type{font-size:12px;color:var(--muted);letter-spacing:1px}
+    .meta h4{margin:8px 0 6px;font-size:15px}
+    .price{font-family:monospace;font-size:14px}
+
+    /* ARROW BUTTONS */
+    .btn-prev, .btn-next{
+      position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:8px;border:none;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;z-index:60;
+      box-shadow:0 12px 30px rgba(0,0,0,0.12);font-weight:700;font-size:18px;
+      background:#111;color:#fff;
+    }
+    .btn-prev{right:88px;background:#fff;color:#222;border:1px solid #eee}
+    .btn-next{right:18px}
+    .btn-prev[disabled], .btn-next[disabled]{opacity:.35;cursor:not-allowed;box-shadow:none}
+
+    /* PRICE BOX ROW */
+    .price-row{display:flex;gap:16px;margin:28px 0}
+    .price-card{flex:1;padding:36px;border-radius:8px;text-align:center;font-weight:700;color:#fff}
+    .price-card.yellow{background:var(--accent);color:#222}
+    .price-card.red{background:#c62828}
+
+    /* TILES */
+    .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+    .tile{position:relative;border-radius:8px;overflow:hidden;min-height:240px}
+    .tile img{width:100%;height:260px;object-fit:cover;display:block}
+    .tile h3{position:absolute;left:20px;bottom:20px;color:#fff;font-size:22px;margin:0;font-weight:700;text-shadow:0 6px 18px rgba(0,0,0,0.36)}
+
+    /* FOOTER */
+    footer{background:#111;color:#e6e6e6;padding:40px 0;margin-top:40px}
+    .footer-grid{display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap}
+
+    /* ==========================
+       Media queries (responsive)
+       - large screens > 1600
+       - desktop 1300-1600
+       - laptop 980-1300
+       - tablet 700-979
+       - phone-large 480-699
+       - phone-small <480
+       ========================== */
+
+    /* Very large screens (wider content, bigger images) */
+    @media (min-width:1600px) {
+      :root{
+        --max-width:1500px;
+        --card-w:300px;
+        --card-img-h:380px;
+        --hero-right-w:560px;
+        --gap:34px;
+        --title-size:40px;
+        --base-font:18px;
+      }
+      .logo{font-size:26px}
+      .hero-left img, .hero-right img{height:520px}
+    }
+
+    /* Desktop */
+    @media (min-width:1300px) and (max-width:1599px) {
+      :root{
+        --card-w:280px;
+        --card-img-h:360px;
+        --hero-right-w:520px;
+        --gap:32px;
+        --title-size:36px;
+        --base-font:17px;
+      }
+      .hero-left img, .hero-right img{height:500px}
+    }
+
+    /* Laptop / small desktop */
+    @media (min-width:980px) and (max-width:1299px) {
+      :root{
+        --card-w:240px;
+        --card-img-h:320px;
+        --hero-right-w:420px;
+        --gap:28px;
+        --title-size:32px;
+        --base-font:16px;
+      }
+      .hero-left img, .hero-right img{height:420px}
+    }
+
+    /* Tablet */
+    @media (min-width:700px) and (max-width:979px) {
+      :root{
+        --card-w:220px;
+        --card-img-h:300px;
+        --hero-right-w:380px;
+        --gap:22px;
+        --title-size:30px;
+        --base-font:15px;
+      }
+      .hero-grid{grid-template-columns:1fr 360px}
+      .hero-left img, .hero-right img{height:340px}
+      .tiles{grid-template-columns:repeat(2,1fr)}
+      .btn-prev{right:72px}
+      .btn-next{right:12px}
+    }
+
+    /* large phones */
+    @media (min-width:480px) and (max-width:699px) {
+      :root{
+        --card-w:200px;
+        --card-img-h:260px;
+        --hero-right-w:320px;
+        --gap:18px;
+        --title-size:26px;
+        --base-font:15px;
+      }
+      .hero-grid{grid-template-columns:1fr;gap:18px}
+      .hero-left img, .hero-right img{height:260px}
+      .tiles{grid-template-columns:1fr}
+      .btn-prev{right:64px;width:44px;height:44px}
+      .btn-next{right:10px;width:44px;height:44px}
+      .card{border-radius:6px}
+    }
+
+    /* small phones */
+    @media (max-width:479px) {
+      :root{
+        --card-w:180px;
+        --card-img-h:220px;
+        --hero-right-w:0;
+        --gap:14px;
+        --title-size:22px;
+        --base-font:14px;
+      }
+      .container{padding:14px}
+      .logo{font-size:18px}
+      .hero-grid{grid-template-columns:1fr;gap:12px}
+      .hero-left img, .hero-right img{height:200px}
+      .card{flex:0 0 var(--card-w);min-width:var(--card-w)}
+      .btn-prev{right:56px;width:40px;height:40px}
+      .btn-next{right:8px;width:40px;height:40px}
+      .section{padding:22px 0}
+      .meta h4{font-size:14px}
+      .tile img{height:180px}
+      .title h2{font-size:var(--title-size)}
+    }
+
+    /* extra-small phones (very narrow) */
+    @media (max-width:360px) {
+      :root{
+        --card-w:150px;
+        --card-img-h:180px;
+        --gap:12px;
+        --title-size:20px;
+        --base-font:13px;
+      }
+      .container{padding:10px}
+      .logo{font-size:16px}
+      .btn-prev{right:48px}
+      .btn-next{right:6px}
+      .card img{height:var(--card-img-h)}
+      .meta h4{font-size:13px}
+      .price-row{
+        display: inline-block;
+        width: 100% !important;
+      }
+    }
+
+    /* Accessibility improvement: focus styles for keyboard users */
+    .btn-prev:focus,.btn-next:focus,.carousel:focus{outline:3px solid rgba(0,120,255,0.12);outline-offset:3px}
+  </style>
+</head>
+<body>
+
+  <!-- NOTE: Keep your image file paths as you already have them. -->
+
+  <div class="topbar container">
+    <div class="logo">Nani Travels</div>
+    <div class="nav-right">
+      <div>DESTINATIONS</div>
+      <div>BOOKS</div>
+      <div>TRIPS</div>
+    
+    </div>
+  </div>
+
+  <main class="container">
+
+    <!-- HERO ROW 1 -->
+    <section class="hero-grid" aria-label="Hero banner">
+      <div class="hero-left"><img src="../images/gif2-6.webp" alt="gift banner left"></div>
+      <div class="hero-right"><img src="../images/gif2-4.webp" alt="book on right"></div>
+    </section>
+
+    <!-- SECTION: Outdoor Lovers -->
+    <section class="section" aria-labelledby="outdoor-title">
+      <div class="section-head">
+        <div class="title">
+          <h2 id="outdoor-title">Best Gifts for Outdoor Lovers</h2>
+          <p class="lead">Skip the pine-scented candle and gift them something closer to the real thing. Explore adventure guides for the outdoor lovers on your list.</p>
+        </div>
+        <div class="view-controls"><a class="view-all" href="#">VIEW ALL</a></div>
+      </div>
+
+      <div class="carousel-wrap" aria-hidden="false">
+        <div class="carousel" tabindex="0" aria-label="Outdoor books carousel">
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-1.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>USA'S NATIONAL PARKS</h4><div class="price">Rs. 1,445 <del style="color:#999;font-size:13px">Rs. 1,700</del></div></div></div>
+
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-3.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>EPIC HIKES OF THE WORLD</h4><div class="price">Rs. 2,380</div></div></div>
+
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-2.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>OFFBEAT</h4><div class="price">Rs. 1,785</div></div></div>
+
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-4.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>NORWAY</h4><div class="price">Rs. 1,955</div></div></div>
+
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-5.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>EPIC TRAIN TRIPS</h4><div class="price">Rs. 1,445</div></div></div>
+
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-6.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>WILD PLACES</h4><div class="price">Rs. 1,220</div></div></div>
+
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-7.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>ADVENTURE MAPS</h4><div class="price">Rs. 985</div></div></div>
+
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-8.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>HIKER'S GUIDE</h4><div class="price">Rs. 1,650</div></div></div>
+        </div>
+
+        <!-- arrows -->
+        <button class="btn-prev" aria-label="Previous">‹</button>
+        <button class="btn-next" aria-label="Next">›</button>
+      </div>
+    </section>
+
+    <!-- HERO ROW 2 -->
+    <section class="hero-grid" aria-label="Hero banner 2">
+      <div class="hero-left"><img src="../images/gif2-4.webp" alt="hero left 2"></div>
+      <div class="hero-right"><img src="../images/gif2-3.webp" alt="hero right 2"></div>
+    </section>
+
+    <!-- SECTION: Sustainable Travelers -->
+    <section class="section" aria-labelledby="sustainable-title">
+      <div class="section-head">
+        <div class="title">
+          <h2 id="sustainable-title">Best Gifts for Sustainable Travelers</h2>
+          <p class="lead">For the traveler who loves the journey as much as the destination. Gift them something special from our Sustainable Travel Collection.</p>
+        </div>
+        <div class="view-controls"><a class="view-all" href="#">VIEW ALL</a></div>
+      </div>
+
+      <div class="carousel-wrap">
+        <div class="carousel" tabindex="0" aria-label="Sustainable books carousel">
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-1.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>EPIC TRAIN TRIPS</h4><div class="price">Rs. 1,445</div></div></div>
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-2.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>FLIGHT-FREE EUROPE</h4><div class="price">Rs. 2,380</div></div></div>
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-3.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>ELECTRIC VEHICLE ROAD TRIPS</h4><div class="price">Rs. 1,785</div></div></div>
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-5.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>TRAIN TRAVEL IN EUROPE</h4><div class="price">Rs. 1,955</div></div></div>
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-6.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>GREEN TRAVEL</h4><div class="price">Rs. 1,350</div></div></div>
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-7.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>SUSTAINABLE GUIDE</h4><div class="price">Rs. 1,095</div></div></div>
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-8.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>LOW IMPACT TRAVEL</h4><div class="price">Rs. 1,245</div></div></div>
+        </div>
+
+        <button class="btn-prev" aria-label="Previous">‹</button>
+        <button class="btn-next" aria-label="Next">›</button>
+      </div>
+    </section>
+
+    <!-- Section: Best in Travel 2026 -->
+    <section class="section" aria-labelledby="best2026-title">
+      <div class="section-head">
+        <div class="title">
+          <h2 id="best2026-title">Best in Travel 2026</h2>
+          <p class="lead">The wait is over. Best in Travel 2026 is here. Get your guide to where, why and how to explore this year.</p>
+        </div>
+        <div class="view-controls"><a class="view-all" href="#">VIEW ALL</a></div>
+      </div>
+
+      <div class="carousel-wrap">
+        <div class="carousel" tabindex="0" aria-label="Best in Travel carousel">
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-8.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>BEST IN TRAVEL 2026</h4><div class="price">Rs. 1,955</div></div></div>
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-7.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>VIETNAM</h4><div class="price">Rs. 2,125</div></div></div>
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-1.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>THAILAND</h4><div class="price">Rs. 1,785</div></div></div>
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-3.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>NEW ZEALAND</h4><div class="price">Rs. 1,955</div></div></div>
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-1.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>AUSTRALIA</h4><div class="price">Rs.1,885</div></div></div>
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-4.webp"alt=""><div class="meta"><div class="type">BOOK</div><h4>CANADA</h4><div class="price">Rs.1,950</div></div></div>
+        </div>
+
+        <button class="btn-prev" aria-label="Previous">‹</button>
+        <button class="btn-next" aria-label="Next">›</button>
+      </div>
+    </section>
+
+    <!-- PRICE BOXES -->
+    <section class="section" aria-label="price categories">
+      <div class="price-row">
+        <div class="price-card red">GIFTS UNDER $15</div>
+        <div class="price-card yellow">GIFTS UNDER $25</div>
+        <div class="price-card red">GIFTS UNDER $50</div>
+      </div>
+    </section>
+
+    <!-- STAFF PICKS -->
+    <section class="section" aria-labelledby="staff-title">
+      <div class="section-head">
+        <div class="title">
+          <h2 id="staff-title">Gift Guide 2026 Staff Picks</h2>
+          <p class="lead">Perfect picks and giftable titles, hand-selected by our team of travelers and dreamers.</p>
+        </div>
+        <div class="view-controls"><a class="view-all" href="#">VIEW ALL</a></div>
+      </div>
+
+      <div class="carousel-wrap">
+        <div class="carousel" tabindex="0" aria-label="Staff picks carousel">
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-1.webp"alt=""><div class="meta"><div class="type">BOOK</div><h4>THE MEDITERRANEAN</h4><div class="price">Rs. 2,380</div></div></div>
+          <div class="card"><div class="sticker">SOLD OUT</div><img src="../images/gif2-5.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>100 WEEKENDS IN EUROPE</h4><div class="price">—</div></div></div>
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-6.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>EPIC TRAIN TRIPS</h4><div class="price">Rs. 1,445</div></div></div>
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-7.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>EPIC VAN TRIPS</h4><div class="price">Rs. 1,785</div></div></div>
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-8.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>KOREA</h4><div class="price">Rs.1,290</div></div></div>
+        </div>
+
+        <button class="btn-prev" aria-label="Previous">‹</button>
+        <button class="btn-next" aria-label="Next">›</button>
+      </div>
+    </section>
+
+    <!-- BIG TILES -->
+    <section class="section">
+      <div class="tiles">
+        <div class="tile"><img src="../images/gif2-4.webp" alt=""><h3>BEST IN TRAVEL 2026</h3></div>
+        <div class="tile"><img src="../images/gif2-5.webp" alt=""><h3>BEST GIFTS FOR SUSTAINABLE TRAVELERS</h3></div>
+        <div class="tile"><img src="../images/gif2-6.webp" alt=""><h3>STAFF PICKS</h3></div>
+      </div>
+    </section>
+
+    <!-- CITY GUIDES CAROUSEL (Best Gifts for Everyone) -->
+    <section class="section" aria-labelledby="everyone-title">
+      <div class="section-head">
+        <div class="title">
+          <h2 id="everyone-title">Best Gifts for Everyone</h2>
+          <p class="lead">Plan smarter, dream bigger and keep the detours iconic. Get them something they'll actually love unwrapping this season.</p>
+        </div>
+        <div class="view-controls"><a class="view-all" href="#">VIEW ALL</a></div>
+      </div>
+
+      <div class="carousel-wrap">
+        <div class="carousel" tabindex="0" aria-label="City guides carousel">
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-1.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>EXPERIENCE PARIS</h4><div class="price">Rs. 1,955</div></div></div>
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-2.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>EXPERIENCE LONDON</h4><div class="price">Rs. 1,955</div></div></div>
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-8.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>EXPERIENCE NEW YORK CITY</h4><div class="price">Rs. 2,125</div></div></div>
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-5.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>SINGAPORE</h4><div class="price">Rs. 1,955</div></div></div>
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-3.webp" alt=""><div class="meta"><div class="type">BOOK</div><h4>TOKYO</h4><div class="price">Rs. 1,955</div></div></div>
+          <div class="card"><div class="sticker">USE FINAL15 FOR 15% OFF</div><img src="../images/gif2-7.webp"alt=""><div class="meta"><div class="type">BOOK</div><h4>BARCELONA</h4><div class="price">Rs. 1,455</div></div></div>
+        </div>
+
+        <button class="btn-prev" aria-label="Previous">‹</button>
+        <button class="btn-next" aria-label="Next">›</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div style="max-width:420px">
+          <div style="font-weight:700;font-size:20px;margin-bottom:8px">lonely planet</div>
+          <p style="color:#bbb;margin:0 0 12px">OUR GUIDES. YOUR STORIES.</p>
+          <p style="color:#bbb;font-size:14px">Follow us</p>
+        </div>
+
+        <div style="display:flex;gap:30px;color:#ddd;flex-wrap:wrap">
+          <div><h4 style="margin:0 0 10px">DESTINATIONS</h4><div style="color:#aaa">Europe<br>Asia<br>North America</div></div>
+          <div><h4 style="margin:0 0 10px">PRODUCTS</h4><div style="color:#aaa">Guidebooks<br>Maps<br>Food & Drink</div></div>
+          <div><h4 style="margin:0 0 10px">ABOUT</h4><div style="color:#aaa">Contact<br>FAQs<br>Privacy</div></div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* Robust carousel logic:
+       - Each .carousel-wrap contains exactly one .carousel and two buttons.
+       - Buttons are inside the wrap so JS can find the local carousel.
+       - Scroll step is computed from the card width + gap so arrows move by one card.
+       - Buttons auto-disable at start/end.
+       - Keyboard left/right arrows scroll the focused carousel (if any).
+    */
+
+    function initAllCarousels() {
+      const wraps = document.querySelectorAll('.carousel-wrap');
+
+      wraps.forEach(wrap => {
+        const carousel = wrap.querySelector('.carousel');
+        const prev = wrap.querySelector('.btn-prev');
+        const next = wrap.querySelector('.btn-next');
+
+        if (!carousel) return;
+
+        function computeStep() {
+          const card = carousel.querySelector('.card');
+          if (!card) return 260 + 28;
+          const cardRect = card.getBoundingClientRect();
+          const gap = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gap')) || 28;
+          return Math.round(cardRect.width + gap);
+        }
+
+        function updateButtons() {
+          const maxScrollLeft = Math.max(0, carousel.scrollWidth - carousel.clientWidth - 1);
+          if (prev) prev.disabled = carousel.scrollLeft <= 0;
+          if (next) next.disabled = carousel.scrollLeft >= maxScrollLeft;
+        }
+
+        function scrollByStep(amount) {
+          carousel.scrollBy({ left: amount, behavior: 'smooth' });
+        }
+
+        prev && prev.addEventListener('click', () => {
+          scrollByStep(-computeStep());
+        });
+
+        next && next.addEventListener('click', () => {
+          scrollByStep(computeStep());
+        });
+
+        carousel.addEventListener('scroll', () => {
+          window.clearTimeout(carousel._updateTimeout);
+          carousel._updateTimeout = window.setTimeout(updateButtons, 50);
+        });
+
+        // update after images load
+        window.addEventListener('load', updateButtons);
+        window.addEventListener('resize', () => { window.setTimeout(updateButtons, 80); });
+
+        // keyboard support (when carousel focused)
+        carousel.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowRight') { e.preventDefault(); scrollByStep(computeStep()); }
+          if (e.key === 'ArrowLeft') { e.preventDefault(); scrollByStep(-computeStep()); }
+        });
+
+        updateButtons();
+      });
+
+      // global keyboard handler doesn't interfere; focused carousel handles keys
+    }
+
+    document.addEventListener('DOMContentLoaded', initAllCarousels);
+  </script>
+</body>
+</html>

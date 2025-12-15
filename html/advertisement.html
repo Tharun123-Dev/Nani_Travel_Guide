@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nani Travels — Promotions & Ads</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =================== VARIABLES & RESET =================== */
+    :root{
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --muted: #6b7280;
+      --accent: linear-gradient(90deg,#0b84ff,#8a2be2);
+      --accent-solid: #0b84ff;
+      --shadow: 0 10px 30px rgba(16,24,40,0.08);
+      --radius: 14px;
+      --maxw: 1200px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;color:#0f172a;background:var(--bg);-webkit-font-smoothing:antialiased}
+    img{max-width:100%;display:block}
+    a{color:inherit}
+
+    /* =================== NAVBAR =================== */
+    header.nav{
+      background:rgba(255,255,255,0.98);backdrop-filter:blur(6px);position:sticky;top:0;z-index:60;border-bottom:1px solid rgba(15,23,42,0.04);
+      padding:12px 20px; display:flex;align-items:center;justify-content:space-between;gap:12px;
+    }
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{width:44px;height:44px;border-radius:10px;background:var(--accent-solid);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;box-shadow:var(--shadow)}
+    .site-title{font-weight:700;font-size:16px}
+    .nav-links{display:flex;gap:14px;align-items:center}
+    .nav-links a{padding:8px 12px;border-radius:10px;font-weight:600;color:var(--muted);font-size:14px}
+    .nav-links a.cta{background:linear-gradient(90deg,#0b84ff,#7c4dff);color:#fff;box-shadow:0 8px 24px rgba(11,132,255,0.18)}
+
+    /* =================== LAYOUT =================== */
+    .wrap{max-width:var(--maxw);margin:26px auto;padding:0 20px}
+
+    /* =================== HERO =================== */
+    .hero{
+      display:grid;grid-template-columns: 1fr 420px;gap:20px;align-items:stretch;margin-bottom:22px;
+    }
+    .hero-card{
+      background:linear-gradient(180deg, #ffffff, #fbfdff);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);
+      display:flex;flex-direction:column;gap:14px;justify-content:center;
+    }
+    .kicker{display:inline-block;padding:6px 10px;background:linear-gradient(90deg,#eef6ff,#f5ecff);color:var(--accent-solid);border-radius:999px;font-weight:700;font-size:13px}
+    .hero h1{margin:0;font-size:30px;line-height:1.05}
+    .hero p.lead{margin:0;color:var(--muted);font-size:15px}
+    .hero .cta-row{display:flex;gap:10px;align-items:center;margin-top:8px}
+    .btn{
+      padding:10px 16px;border-radius:12px;border:0;font-weight:700;cursor:pointer;
+      background:linear-gradient(90deg,#0b84ff,#7c4dff);color:#fff;box-shadow:0 10px 24px rgba(11,132,255,0.12)
+    }
+    .btn.ghost{background:transparent;border:1px solid rgba(15,23,42,0.06);color:#0b1220}
+
+    /* RIGHT: promo strip */
+    .promo-strip{background:linear-gradient(180deg,#fff,#faf8ff);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px;align-items:stretch}
+    .promo-strip h3{margin:0;font-size:16px}
+    .promo-item{display:flex;gap:12px;align-items:center;background:linear-gradient(90deg,#fff,#f8fcff);padding:10px;border-radius:10px;border:1px solid rgba(11,132,255,0.06)}
+    .promo-item img{width:68px;height:52px;border-radius:8px;object-fit:cover}
+    .promo-item small{color:var(--muted);display:block;font-size:13px}
+    .promo-offer{font-weight:700;color:#0b84ff}
+
+    /* =================== CAROUSEL =================== */
+    .carousel{position:relative;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+    .slides{display:flex;transition:transform 520ms cubic-bezier(.2,.9,.2,1)}
+    .slide{min-width:100%;display:block}
+    .slide img{width:100%;height:300px;object-fit:cover}
+    .carousel .dots{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;display:flex;gap:8px}
+    .dot{width:10px;height:10px;border-radius:999px;background:rgba(255,255,255,0.6);box-shadow:0 2px 8px rgba(0,0,0,0.12);cursor:pointer}
+    .dot.active{background:linear-gradient(90deg,#0b84ff,#7c4dff)}
+
+    /* =================== ADS GRID =================== */
+    .ads-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+    .ad-card{background:var(--card);border-radius:12px;padding:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
+    .ad-card .ad-media{height:180px;border-radius:10px;overflow:hidden;background:#eef2ff;display:flex;align-items:center;justify-content:center}
+    .ad-card h4{margin:0;font-size:18px}
+    .ad-card p{margin:0;color:var(--muted);font-size:14px}
+    .ad-actions{display:flex;gap:8px;margin-top:auto}
+    .tag{display:inline-block;padding:6px 10px;border-radius:999px;background:#eff6ff;color:#0b6cff;font-weight:700;font-size:13px}
+
+    /* coupon / small ad */
+    .ad-small{display:flex;gap:12px;align-items:center;padding:10px;border-radius:10px;background:linear-gradient(90deg,#fff7ed,#fff);border:1px solid rgba(222,150,40,0.08)}
+    .coupon{font-weight:800;color:#b45309;font-size:20px}
+
+    /* video placeholder */
+    .video-placeholder{display:flex;align-items:center;justify-content:center;height:180px;background:linear-gradient(180deg,#00000010,#00000005);border-radius:10px;color:var(--muted);font-weight:700}
+
+    /* =================== SIDEBAR (sticky) =================== */
+    .layout{display:grid;grid-template-columns:1fr 320px;gap:18px}
+    .sidebar{position:sticky;top:84px;height:max-content;align-self:start;display:flex;flex-direction:column;gap:12px}
+    .sticky-cta{background:linear-gradient(90deg,#0b84ff,#7c4dff);color:#fff;border-radius:12px;padding:14px;box-shadow:0 14px 40px rgba(11,132,255,0.12);text-align:center}
+    .sticky-cta h3{margin:0 0 6px;font-size:18px}
+    .sticky-cta p{margin:0;color:#eaf2ff;font-size:14px}
+
+    /* =================== FOOTER =================== */
+    footer{margin-top:28px;padding:26px;background:#0b1220;color:#dfe7ff;border-radius:12px;box-shadow:var(--shadow)}
+    footer .f-row{display:flex;gap:18px;flex-wrap:wrap}
+    footer .f-col{flex:1;min-width:200px}
+    footer small{color:#aab3cf}
+
+    /* =================== FLOATING CTA BUTTON =================== */
+    .float-cta{position:fixed;right:18px;bottom:18px;border-radius:14px;padding:12px 16px;background:linear-gradient(90deg,#ff7a59,#ff3d81);color:#fff;font-weight:700;box-shadow:0 18px 48px rgba(255,61,129,0.16);cursor:pointer;z-index:80}
+
+    /* =================== RESPONSIVE =================== */
+    @media (max-width:1000px){
+      .hero{grid-template-columns:1fr}
+      .layout{grid-template-columns:1fr}
+      .ads-grid{grid-template-columns:repeat(2,1fr)}
+      .promo-strip{order:2}
+      .carousel .slide img{height:220px}
+    }
+    @media (max-width:640px){
+      .ads-grid{grid-template-columns:1fr}
+      .nav-links{display:none}
+      .hero h1{font-size:22px}
+      .brand .logo{width:40px;height:40px}
+      .slide img{height:160px}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="brand">
+      <div class="logo">NT</div>
+      <div>
+        <div class="site-title">Nani Travels</div>
+        <div style="font-size:12px;color:var(--muted)">Ad & Promotions Hub</div>
+      </div>
+    </div>
+
+    <nav class="nav-links" aria-label="main nav">
+      <a href="#featured">Featured</a>
+      <a href="#deals">Deals</a>
+      <a href="#ads">Ads</a>
+      <a href="#contact" class="cta">Contact</a>
+    </nav>
+
+    <div>
+      <button class="btn" onclick="openSubscribe()">Subscribe</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- HERO + PROMO STRIP -->
+    <section class="hero">
+      <div class="hero-card">
+        <span class="kicker">Limited time</span>
+        <h1>Explore the world. Save big with Nani Travels' featured deals.</h1>
+        <p class="lead">Handpicked packages, exclusive coupons and city-specific flyers — crafted to make your next booking irresistible. Scroll down to see creative ad formats you can use on your site or social media.</p>
+
+        <div class="cta-row">
+          <button class="btn" onclick="openSubscribe()">Get Latest Deals</button>
+          <button class="btn ghost" onclick="scrollToSection('ads')">See Ad Examples</button>
+        </div>
+
+        <!-- carousel -->
+        <div style="margin-top:14px" id="featured">
+          <div class="carousel" id="carousel">
+            <div class="slides" id="slides">
+              <!-- change images/featured1.jpg etc to your images -->
+              <div class="slide"><img src="../images/feature1" alt="Featured 1"></div>
+              <div class="slide"><img src="../images/b10.webp" alt="Featured 2"></div>
+              <div class="slide"><img src="../images/feature4" alt="Featured 3"></div>
+            </div>
+            <div class="dots" id="dots"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- right promo column -->
+      <aside class="promo-strip" aria-labelledby="promo">
+        <h3 id="promo">Top promos</h3>
+
+        <div class="promo-item">
+          <img src="../images/fea1.jpg" alt="">
+          <div>
+            <div class="promo-offer">Flat 25% OFF</div>
+            <small>Use code: NANI25 · Domestic flights</small>
+          </div>
+        </div>
+
+        <div class="promo-item">
+          <img src="../images/fea2.jpg" alt="">
+          <div>
+            <div class="promo-offer">Stay 2 nights, get 1</div>
+            <small>Selected hotels · Limited rooms</small>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px">
+          <button class="btn" style="flex:1" onclick="openSubscribe()">Claim Offer</button>
+          <button class="btn ghost" style="flex:1" onclick="scrollToSection('deals')">View All</button>
+        </div>
+      </aside>
+    </section>
+
+    <!-- LAYOUT: ADS + SIDEBAR -->
+    <section class="layout" id="ads">
+      <div>
+        <!-- AD CARDS GRID -->
+        <div class="ads-grid" id="adGrid">
+
+          <!-- AD 1: bold image ad -->
+          <div class="ad-card">
+            <div class="ad-media"><img src="../images/fea4.jpg" alt="Ad 1"></div>
+            <div>
+              <div class="tag">Featured</div>
+              <h4>Summer Escape — 3 Nights Package</h4>
+              <p>Seaside stays and breakfast included. Limited seats.</p>
+            </div>
+            <div class="ad-actions">
+              <button class="btn" onclick="openSubscribe()">Book Now</button>
+              <button class="btn ghost" onclick="copyAdLink('https://nani.example/summer')">Copy Link</button>
+            </div>
+          </div>
+
+          <!-- AD 2: coupon-style -->
+          <div class="ad-card">
+            <div class="ad-small">
+              <div style="flex:1">
+                <div class="coupon">SAVE50</div>
+                <div style="font-size:13px;color:var(--muted)">Instant discount on international flights</div>
+              </div>
+              <div>
+                <button class="btn" onclick="openSubscribe()">Apply</button>
+              </div>
+            </div>
+            <h4>Flash Coupon</h4>
+            <p>Use at checkout for instant savings. Valid for next 72 hours.</p>
+          </div>
+
+          <!-- AD 3: text-heavy banner -->
+          <div class="ad-card">
+            <div class="ad-media" style="background:#0b84ff;color:#fff;display:flex;align-items:center;justify-content:center">
+              <div style="text-align:center;padding:12px">
+                <div style="font-size:22px;font-weight:800">City Breaks</div>
+                <div style="font-size:13px;margin-top:6px">From $99 / night</div>
+              </div>
+            </div>
+            <h4>Quick City Breaks</h4>
+            <p>Curated weekend itineraries with guide cards and maps.</p>
+            <div class="ad-actions">
+              <button class="btn" onclick="openSubscribe()">Plan Trip</button>
+              <button class="btn ghost" onclick="downloadAsset('city-brochure.pdf')">Download PDF</button>
+            </div>
+          </div>
+
+          <!-- AD 4: video placeholder -->
+          <div class="ad-card">
+            <div class="video-placeholder">VIDEO (placeholder)</div>
+            <h4>Watch: 48 Hours in Bali</h4>
+            <p>Short cinematic ad for social channels. Use as a 30s clip.</p>
+          </div>
+
+          <!-- AD 5: image + testimonial -->
+          <div class="ad-card">
+            <div class="ad-media"><img src="../images/b2.webp" alt=""></div>
+            <h4>Family Friendly Tours</h4>
+            <p>"Our kids loved every stop!" — A. Kumar</p>
+            <div class="ad-actions"><button class="btn" onclick="openSubscribe()">Enquire</button></div>
+          </div>
+
+          <!-- AD 6: small banner -->
+          <div class="ad-card">
+            <div style="display:flex;gap:12px;align-items:center">
+              <img src="../images/book3.avif" alt="" style="width:78px;height:78px;border-radius:8px;object-fit:cover">
+              <div>
+                <div style="font-weight:700">Weekend Wonders</div>
+                <small style="color:var(--muted)">Short trips under 300 km</small>
+              </div>
+            </div>
+            <div style="margin-top:12px" class="ad-actions">
+              <button class="btn" onclick="openSubscribe()">Explore</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sticky-cta">
+          <h3>Special Launch Offer</h3>
+          <p>Extra 10% off for the first 100 bookings. Use code: LAUNCH10</p>
+          <div style="margin-top:10px">
+            <button class="btn" onclick="openSubscribe()">Claim Code</button>
+          </div>
+        </div>
+
+        <!-- small ad examples -->
+        <div class="ad-card">
+          <h4>Sponsored: Adventure Gear</h4>
+          <p class="meta">Affiliate creative for equipment brands — use this block to cross-promote</p>
+          <div style="margin-top:8px"><button class="btn ghost" onclick="copyAdLink('#')">Sponsor</button></div>
+        </div>
+
+        <div class="ad-card">
+          <h4>Newsletter</h4>
+          <p class="meta">Get ad templates & monthly promo tips.</p>
+          <div style="margin-top:8px"><button class="btn" onclick="openSubscribe()">Subscribe</button></div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- DEALS strip -->
+    <section id="deals" style="margin-top:22px">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+        <div style="background:#fff;padding:12px;border-radius:12px;box-shadow:var(--shadow);flex:1">
+          <strong>Weekly Highlight:</strong> European autumn escapes from $349.
+        </div>
+        <div style="background:linear-gradient(90deg,#fef3c7,#fff7ed);padding:12px;border-radius:12px;box-shadow:var(--shadow)">
+          <strong>Mobile-only offer:</strong> Book via app & get priority seats.
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT / FOOTER -->
+    <footer style="margin-top:28px">
+      <div style="display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:flex-start">
+        <div>
+          <div style="font-weight:800;font-size:18px">Nani Travels</div>
+          <small style="color:var(--muted)">Ads & Promotions Hub • crafted creatives for travel brands</small>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <small style="color:var(--muted)">Email</small>
+          <a href="mailto:ads@nani.example" style="font-weight:700;color:#fff;background:linear-gradient(90deg,#0b84ff,#7c4dff);padding:8px 12px;border-radius:8px">ads@nani.example</a>
+        </div>
+      </div>
+      <div style="margin-top:18px;color:#dbeafe;font-size:13px">© Nani Travels · Creative ad templates for travel brands</div>
+    </footer>
+  </main>
+
+  <!-- FLOATING CTA -->
+  <div class="float-cta" onclick="openSubscribe()">Book Now — 10% OFF</div>
+
+  <!-- SUBSCRIBE / BOOK MODAL -->
+  <div id="subscribeModal" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.5);z-index:120;padding:18px">
+    <div style="width:100%;max-width:520px;background:#fff;padding:18px;border-radius:12px;box-shadow:var(--shadow)">
+      <h3 style="margin:0 0 8px">Claim Offer & Subscribe</h3>
+      <p style="margin:0 0 12px;color:var(--muted)">Enter your email to get the coupon and latest ads templates.</p>
+
+      <input id="subEmail" type="email" placeholder="you@domain.com" style="width:100%;padding:10px;border-radius:10px;border:1px solid #e6eef8;margin-bottom:10px">
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button style="padding:10px 12px;border-radius:10px;border:1px solid #e6eef8;background:#fff;cursor:pointer" onclick="closeSubscribe()">Cancel</button>
+        <button style="padding:10px 14px;border-radius:10px;background:linear-gradient(90deg,#0b84ff,#7c4dff);color:#fff;border:0;cursor:pointer" onclick="saveSubscribe()">Subscribe & Get Code</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =================== CAROUSEL (simple) =================== */
+    (function(){
+      const slidesEl = document.getElementById('slides');
+      const slides = Array.from(slidesEl.children);
+      const dotsEl = document.getElementById('dots');
+      let idx = 0, timer = null;
+
+      function makeDots(){
+        slides.forEach((s,i)=>{
+          const d = document.createElement('div');
+          d.className = 'dot' + (i === 0 ? ' active' : '');
+          d.addEventListener('click', ()=>{ goTo(i); resetTimer(); });
+          dotsEl.appendChild(d);
+        });
+      }
+      function update(){
+        slidesEl.style.transform = `translateX(-${idx * 100}%)`;
+        Array.from(dotsEl.children).forEach((d,i)=> d.classList.toggle('active', i === idx));
+      }
+      function next(){ idx = (idx + 1) % slides.length; update(); }
+      function goTo(i){ idx = i; update(); }
+      function resetTimer(){ clearInterval(timer); timer = setInterval(next, 4000); }
+
+      if(slides.length > 0){
+        makeDots();
+        timer = setInterval(next, 4000);
+        // pause on hover
+        const carousel = document.getElementById('carousel');
+        carousel.addEventListener('mouseenter', ()=> clearInterval(timer));
+        carousel.addEventListener('mouseleave', resetTimer);
+      }
+    })();
+
+    /* =================== SUBSCRIBE modal =================== */
+    function openSubscribe(){ document.getElementById('subscribeModal').style.display = 'flex'; }
+    function closeSubscribe(){ document.getElementById('subscribeModal').style.display = 'none'; }
+    function saveSubscribe(){
+      const email = document.getElementById('subEmail').value.trim();
+      if(!email || !email.includes('@')){ alert('Please enter a valid email'); return; }
+      // demo: store locally and show code
+      localStorage.setItem('nani_sub_email', email);
+      alert('Thanks! Your code: NANI10 (10% off). We saved your email locally.');
+      closeSubscribe();
+    }
+
+    /* =================== UTILITIES =================== */
+    function scrollToSection(id){
+      const el = document.getElementById(id);
+      if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+    function copyAdLink(url){
+      navigator.clipboard?.writeText(url).then(()=> alert('Ad link copied'), ()=> alert('Copy failed — please copy manually'));
+    }
+    function downloadAsset(name){
+      alert('Pretend download: ' + name + '\nReplace with a real link to download.');
+    }
+
+    // small UX: keyboard ESC closes modal
+    window.addEventListener('keydown', (e)=> {
+      if(e.key === 'Escape') closeSubscribe();
+    });
+  </script>
+</body>
+</html>

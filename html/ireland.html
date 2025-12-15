@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Guide to Ireland – Clone</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#222;line-height:1.6;}
+    a{color:#0058a3;text-decoration:none;}
+    a:hover{text-decoration:underline;}
+
+    header{border-bottom:1px solid #e0e0e0;background:#fff;position:sticky;top:0;z-index:10;}
+    .nav-bar{max-width:1100px;margin:0 auto;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;}
+    .logo{font-weight:bold;font-size:22px;display:flex;align-items:center;gap:8px;}
+    .logo-circle{width:24px;height:24px;border-radius:50%;background:#0058a3;}
+    .nav-links{display:flex;gap:24px;font-size:14px;text-transform:uppercase;letter-spacing:.05em;}
+    .nav-actions{display:flex;gap:12px;align-items:center;}
+    .btn-outline,.btn-solid{padding:8px 16px;border-radius:20px;border:1px solid #222;font-size:13px;background:transparent;cursor:pointer;}
+    .btn-solid{background:#222;color:#fff;}
+
+    .hero{background:#f4f4f4;padding:40px 0 24px;border-bottom:1px solid #e0e0e0;}
+    .hero-inner{max-width:900px;margin:0 auto;padding:0 20px;}
+    .breadcrumb{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:#555;margin-bottom:18px;}
+    .hero-title{font-size:40px;line-height:1.15;font-weight:800;margin-bottom:18px;}
+    .hero-meta{display:flex;align-items:center;gap:10px;font-size:13px;color:#555;margin-bottom:10px;}
+    .author-avatar{width:40px;height:40px;border-radius:50%;background:#ccc;}
+    .hero-buttons{display:flex;gap:10px;margin-top:10px;}
+    .chip{padding:6px 16px;border-radius:20px;border:1px solid #ccc;font-size:12px;background:#fff;cursor:pointer;}
+
+    .hero-image-wrapper{max-width:1100px;margin:0 auto;padding:0 20px 40px;}
+    .hero-image{width:100%;max-height:420px;object-fit:cover;display:block;}
+
+    .page-wrapper{max-width:1100px;margin:0 auto 40px;padding:0 20px;display:flex;gap:32px;}
+    .article-main{flex:3;}
+    .sidebar{flex:1;}
+    .sidebar img{width:100%;display:block;}
+    .sidebar-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#888;margin-bottom:6px;text-align:center;}
+    .article-main p{margin-bottom:16px;font-size:15px;color:#333;}
+    .article-main h2{margin:36px 0 16px;font-size:28px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;}
+    .article-main h3{margin:20px 0 4px;font-size:20px;font-weight:800;}
+
+    .full-image-section{max-width:1100px;margin:40px auto;padding:0 20px;}
+    .full-image-section img{width:100%;display:block;}
+    .caption{font-size:12px;color:#777;margin-top:6px;text-align:center;}
+
+    .books-section{background:#f4f4f4;padding:40px 0;margin-top:20px;}
+    .books-inner{max-width:1100px;margin:0 auto;padding:0 20px;}
+    .books-title{font-size:36px;font-weight:800;margin-bottom:26px;}
+    .books-top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+    .books-top-row a{font-size:13px;letter-spacing:.12em;text-transform:uppercase;}
+    .books-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:24px;}
+    .book-card img{width:100%;height:220px;object-fit:cover;margin-bottom:10px;background:#ddd;}
+    .book-meta{font-size:11px;color:#777;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+    .book-title{font-size:13px;font-weight:700;text-transform:uppercase;border-bottom:1px solid #000;padding-bottom:6px;}
+
+    footer{background:#111;color:#fff;margin-top:40px;padding:40px 0 20px;}
+    .footer-inner{max-width:1100px;margin:0 auto;padding:0 20px;}
+    .footer-top{display:flex;gap:60px;margin-bottom:30px;align-items:flex-start;}
+    .footer-brand{flex:1;}
+    .footer-logo{font-size:22px;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+    .footer-logo-circle{width:24px;height:24px;border-radius:50%;background:#fff;}
+    .footer-brand small{font-size:11px;color:#bbb;}
+    .footer-columns{flex:3;display:grid;grid-template-columns:repeat(4,1fr);gap:30px;font-size:13px;}
+    .footer-columns h4{font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;}
+    .footer-columns ul{list-style:none;}
+    .footer-columns li{margin-bottom:6px;}
+
+    .newsletter{margin-top:24px;max-width:320px;}
+    .newsletter h4{font-size:16px;margin-bottom:6px;}
+    .newsletter p{font-size:13px;margin-bottom:10px;color:#ccc;}
+    .newsletter input{width:100%;padding:10px 12px;border-radius:4px;border:none;margin-bottom:10px;}
+    .newsletter button{padding:8px 18px;border-radius:20px;border:1px solid #fff;background:transparent;color:#fff;font-size:13px;cursor:pointer;}
+
+    .footer-bottom{border-top:1px solid #333;margin-top:20px;padding-top:10px;font-size:11px;color:#aaa;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+    .lang-select{background:#222;color:#fff;border-radius:20px;border:1px solid #555;padding:6px 12px;font-size:11px;}
+
+    @media(max-width:900px){
+      .page-wrapper{flex-direction:column;}
+      .books-grid{grid-template-columns:repeat(2,1fr);}
+      .footer-top{flex-direction:column;}
+      .footer-columns{grid-template-columns:repeat(2,1fr);}
+    }
+    @media(max-width:600px){
+      .hero-title{font-size:30px;}
+      .books-grid{grid-template-columns:1fr;}
+      .footer-columns{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="nav-bar">
+    <div class="logo">
+      <div class="logo-circle"></div>
+      <span>Nani Travel Planner</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#">Destinations</a>
+      <a href="#">Books</a>
+      <a href="#">Trips</a>
+      <a href="#">Stories</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="btn-outline">Cart</button>
+      <button class="btn-solid">Sign in</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="breadcrumb">TRAVEL STORIES &gt; EUROPE &gt; IRELAND</div>
+    <h1 class="hero-title">A guide to Ireland, everything you need to know</h1>
+    <div class="hero-meta">
+      <div class="author-avatar"></div>
+      <div>
+        <div><strong>nani</strong></div>
+        <div>Mar 27, 2025 · 7 min read</div>
+      </div>
+    </div>
+    <div class="hero-buttons">
+      <button class="chip">Save</button>
+      <button class="chip">Share</button>
+    </div>
+  </div>
+
+  <img src="../images/irelandbig.avif" alt="" style="width: 70%; margin-left: 200px;">
+</section>
+
+<div class="hero-image-wrapper">
+  <img src="../images/ireland1.webp" alt="Ireland landscape" class="hero-image">
+</div>
+
+<div class="page-wrapper">
+  <main class="article-main">
+    <p>Ireland is known for its green countryside, historic cities, live music and friendly pubs that make visitors feel at home.[web:40][web:52]</p>
+    <p>From dramatic Atlantic cliffs to quiet inland lakes, the small island offers a mix of road‑trip scenery, culture and outdoor adventure.[web:39][web:40]</p>
+
+    <h2>WHEN TO GO TO IRELAND</h2>
+    <p>Weather is changeable year‑round, but late spring through early autumn generally brings longer days and better conditions for exploring.[web:52]</p>
+    <p>Winter can be cool and wet yet offers cozy evenings in pubs and fewer crowds at popular sights.[web:52]</p>
+
+    <h2>HOW MUCH TIME SHOULD I SPEND?</h2>
+    <p>Plan at least a week to combine Dublin with one or two regions such as the west coast or the southeast.[web:52]</p>
+    <p>With two weeks you can loop between cities, coastal drives and rural areas at a relaxed pace.[web:39][web:40]</p>
+
+    <h2>IS IT EASY TO GET AROUND IRELAND?</h2>
+    <p>Major towns are linked by trains and buses, while renting a car gives the most freedom for small villages and viewpoints.[web:40]</p>
+    <p>Many visitors follow signposted routes like the Wild Atlantic Way or the Ring of Kerry to see classic coastal scenery.[web:39][web:46]</p>
+
+    <h2>TOP 5 THINGS TO DO IN IRELAND</h2>
+    <h3>Drive the Wild Atlantic Way</h3>
+    <p>Follow the long coastal route from Donegal to Cork for sea cliffs, surf beaches and colorful villages.[web:39][web:46]</p>
+
+    <h3>Explore Dublin</h3>
+    <p>Walk between historic colleges, museums and busy pub streets to experience Ireland’s capital culture.[web:40]</p>
+
+    <h3>Visit ancient sites</h3>
+    <p>Prehistoric tombs, early monasteries and stone castles appear across the countryside, many with visitor centers.[web:39][web:40]</p>
+
+    <h3>Enjoy traditional music</h3>
+    <p>Small towns and city neighborhoods host evening sessions where local musicians play fiddles, flutes and songs.[web:40]</p>
+
+    <h3>Hike in national parks</h3>
+    <p>Places like Killarney, Connemara and Glenveagh offer lakes, mountains and well‑marked walking trails.[web:39][web:40]</p>
+
+    <h2>TOP LOCAL TIPS</h2>
+    <h3>Pack for changing weather</h3>
+    <p>Layers, a light waterproof jacket and comfortable shoes help for sudden showers and cool evenings.[web:52]</p>
+
+    <h3>Keep it casual</h3>
+    <p>Dress codes are relaxed; smart‑casual clothes work for most restaurants and pubs.[web:52]</p>
+
+    <h3>Allow extra travel time</h3>
+    <p>Country roads can be narrow and slow; plan shorter driving distances than you might in other countries.[web:52]</p>
+
+    <h3>Respect local communities</h3>
+    <p>Park only in marked areas, close gates on farmland and follow signposted walking routes.[web:39][web:52]</p>
+  </main>
+
+  <aside class="sidebar">
+    <div class="sidebar-label">ADVERTISEMENT</div>
+    <img src="../images/ireland2.webp" alt="Ireland trip ad">
+  </aside>
+</div>
+
+<section class="full-image-section">
+  <img src="../images/ireland3.webp" alt="Cliffs in Ireland">
+  <div class="caption">Coastal cliffs along Ireland’s Atlantic edge.</div>
+</section>
+
+<section class="books-section">
+  <div class="books-inner">
+    <div class="books-top-row">
+      <h2 class="books-title">Get a book. Get inspired. Get exploring.</h2>
+      <a href="#">Explore all books</a>
+    </div>
+
+    <div class="books-grid">
+      <div class="book-card">
+        <img src="../images/ireland4.avif" alt="Ireland guide">
+        <div class="book-meta">Guide</div>
+        <div class="book-title">Ireland</div>
+      </div>
+      <div class="book-card">
+        <img src="../images/ireland5.avif" alt="Dublin pocket">
+        <div class="book-meta">Guide</div>
+        <div class="book-title">Pocket Dublin</div>
+      </div>
+      <div class="book-card">
+        <img src="../images/ireland6.avif" alt="Experience Ireland">
+        <div class="book-meta">Guide</div>
+        <div class="book-title">Experience Ireland</div>
+      </div>
+      <div class="book-card">
+        <img src="../images/ireland7.avif" alt="Best of Ireland">
+        <div class="book-meta">Guide</div>
+        <div class="book-title">Best of Ireland</div>
+      </div>
+      <div class="book-card">
+        <img src="../images/irelandbig.avif" alt="Irish road trips">
+        <div class="book-meta">Guide</div>
+        <div class="book-title">Irish Road Trips</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <div class="footer-logo-circle"></div>
+          <span>Nani Travel Planner</span>
+        </div>
+        <small>OUR GUIDES. YOUR STORIES.</small>
+
+        <div class="newsletter">
+          <h4>Join our Newsletter</h4>
+          <p>Get exclusive discounts and Ireland travel inspiration.</p>
+          <input type="email" id="email" placeholder="EMAIL ADDRESS">
+          <button onclick="signupNewsletter()">Sign up</button>
+        </div>
+      </div>
+
+      <div class="footer-columns">
+        <div>
+          <h4>Top destinations</h4>
+          <ul>
+            <li><a href="#">Dublin</a></li>
+            <li><a href="#">Galway</a></li>
+            <li><a href="#">Cork</a></li>
+            <li><a href="#">Belfast</a></li>
+            <li><a href="#">Wild Atlantic Way</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Travel interests</h4>
+          <ul>
+            <li><a href="#">Road trips</a></li>
+            <li><a href="#">Walking &amp; hiking</a></li>
+            <li><a href="#">History &amp; castles</a></li>
+            <li><a href="#">Music &amp; nightlife</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="#">Ireland guides</a></li>
+            <li><a href="#">Maps</a></li>
+            <li><a href="#">Phrasebooks</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>About us</h4>
+          <ul>
+            <li><a href="#">About Lonely Planet</a></li>
+            <li><a href="#">Contact us</a></li>
+            <li><a href="#">Privacy policy</a></li>
+            <li><a href="#">Terms &amp; conditions</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2025 Nani Travel Planner.</span>
+      <select class="lang-select">
+        <option>Language: English</option>
+        <option>Language: Gaeilge</option>
+      </select>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function signupNewsletter(){
+    const email=document.getElementById("email").value.trim();
+    if(!email){alert("Please enter your email address.");}
+    else{alert("Thanks for signing up, "+email+"!");}
+  }
+</script>
+</body>
+</html>

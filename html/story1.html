@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Egypt's Best Beaches — Friendly single page</title>
+
+  <!--
+    Beginner notes:
+    - Change image src paths if you move files (e.g. to images/ folder).
+    - This file uses small JS for interactivity and CSS variables for easy theme edits.
+  -->
+
+  <style>
+    /* =========================
+       VARIABLES & BASE RESET
+       ========================= */
+    :root{
+      --bg: #ffffff;
+      --card: #fbfbfb;
+      --text: #111;
+      --muted: #6f6f6f;
+      --accent: #0b72ef;
+      --max-w: 1100px;
+      --nav-h: 72px;
+      --radius: 8px;
+      --shadow: 0 10px 30px rgba(10,10,10,0.06);
+      --ease: cubic-bezier(.2,.9,.3,1);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;line-height:1.6;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
+    img{display:block;max-width:100%;height:auto;border-radius:6px}
+
+    a{color:var(--accent);text-decoration:none}
+    small{color:var(--muted);font-size:13px}
+
+    /* =========================
+       NAV / HEADER
+       ========================= */
+    header.site-header{
+      position:sticky;top:0;z-index:60;
+      background:rgba(255,255,255,0.98);
+      backdrop-filter: blur(4px);
+      border-bottom:1px solid #eee;
+      transition:box-shadow .25s var(--ease),transform .25s var(--ease);
+    }
+    header.site-header.scrolled{box-shadow:0 6px 18px rgba(10,10,10,0.06);transform:translateY(-1px)}
+    .nav-inner{max-width:var(--max-w);margin:0 auto;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;height:var(--nav-h)}
+    .logo{font-family: Georgia, 'Times New Roman', serif;font-weight:700;letter-spacing:-0.2px}
+    nav ul{list-style:none;margin:0;padding:0;display:flex;gap:10px;align-items:center}
+    nav a{font-size:14px;padding:8px 10px;border-radius:6px;color:#222}
+    nav a:hover{background:#f7f7f7;transform:translateY(-2px);transition:transform .18s var(--ease)}
+
+    /* small-screen: show simple toggle */
+    .menu-toggle{display:none;font-size:20px;border:0;background:transparent;cursor:pointer}
+
+    /* =========================
+       HERO (big full-page image)
+       ========================= */
+    .hero{
+      position:relative;height:78vh;min-height:420px;display:flex;align-items:flex-end;overflow:hidden;
+      color:#fff;
+    }
+    .hero::after{ /* soft dark overlay */
+      content:'';position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,0.48), rgba(0,0,0,0.12));
+      pointer-events:none;
+    }
+    .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.96)}
+    .hero .hero-content{position:relative;z-index:2;padding:36px 20px;max-width:var(--max-w);margin:0 auto}
+    .hero h1{font-family: Georgia, 'Times New Roman', serif;font-size:44px;margin:0 0 8px;line-height:1.02;text-shadow:0 6px 20px rgba(0,0,0,0.45)}
+    .hero .meta{font-size:14px;color:rgba(255,255,255,0.95)}
+
+    /* =========================
+       MAIN CONTENT
+       ========================= */
+    main{max-width:var(--max-w);margin:32px auto;padding:0 18px}
+    .intro{color:var(--muted);font-size:16px;max-width:820px;margin-bottom:24px;opacity:0;transform:translateY(10px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+    .reveal.visible{opacity:1;transform:none}
+
+    section.beach{padding:36px 0;border-top:1px solid #f4f4f4}
+    .beach h2{font-family: Georgia, 'Times New Roman', serif;font-size:30px;margin:0 0 6px}
+    .beach .sub{font-size:13px;color:var(--muted);margin-bottom:14px}
+    .beach p{color:var(--text);max-width:980px;font-size:16px}
+
+    /* two-column row */
+    .row{display:flex;gap:22px;align-items:flex-start}
+    .row .col{flex:1}
+    .row .col.image{flex:0 0 48%}
+    @media (max-width:900px){.row{flex-direction:column}.row .col.image{flex:auto}}
+
+    figure{margin:18px 0}
+    figcaption{color:var(--muted);font-size:13px;margin-top:8px}
+
+    /* subtle hover zoom for images */
+    .img-zoom{overflow:hidden;border-radius:8px}
+    .img-zoom img{transition:transform .7s var(--ease)}
+    .img-zoom:hover img{transform:scale(1.04)}
+
+    .planning{font-weight:700;margin-top:12px}
+
+    /* small "cards" gallery (compact) */
+    .mini-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:14px}
+    .mini-gallery figure{background:var(--card);padding:8px;border-radius:8px;box-shadow:var(--shadow);text-align:left}
+
+    /* =========================
+       FOOTER
+       ========================= */
+    footer.site-footer{background:#0f1113;color:#e6e6e6;padding:36px 18px;margin-top:36px;border-top:4px solid #0b72ef}
+    footer .inner{max-width:var(--max-w);margin:0 auto;display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
+    footer .col{flex:1;min-width:200px}
+    footer h4{margin:0 0 8px;font-size:16px}
+    footer p, footer a{font-size:14px;color:#cfcfcf}
+    footer a:hover{text-decoration:underline}
+
+    /* =========================
+       LIGHTBOX
+       ========================= */
+    .lightbox{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.9);z-index:9999;opacity:0;pointer-events:none;transition:opacity .15s}
+    .lightbox.show{opacity:1;pointer-events:auto}
+    .lightbox img{max-width:94%;max-height:86%;border-radius:8px}
+    .lb-close{position:absolute;top:18px;right:18px;background:rgba(255,255,255,0.12);border:0;color:#fff;padding:8px 12px;border-radius:6px;cursor:pointer}
+
+    /* =========================
+       RESPONSIVE HELPERS
+       ========================= */
+    @media (max-width:720px){
+      .nav-inner{padding:10px}
+      .hero h1{font-size:28px}
+      nav ul{display:none}
+      .menu-toggle{display:block}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="site-header" id="siteHeader">
+    <div class="nav-inner">
+      <div class="logo">Nani-style • Egypt Beaches</div>
+
+      <!-- simple nav - beginner friendly -->
+      <nav>
+        <ul>
+          <li><a href="#almaza">Almaza</a></li>
+          <li><a href="#blue-lagoon">Blue Lagoon</a></li>
+          <li><a href="#el-alamein">El Alamein</a></li>
+          <li><a href="#naama">Naama Bay</a></li>
+          <li><a href="#fjord">Fjord Bay</a></li>
+          <li><a href="#mahmya">Mahmya</a></li>
+          <li><a href="#nayzak">Al Nayzak</a></li>
+          <li><a href="#alex">Alexandria</a></li>
+          <li><a href="#redsea">Red Sea</a></li>
+          <li><a href="#more">More</a></li>
+        </ul>
+      </nav>
+
+      <!-- hamburger for very small screens (no JS here so kept minimal) -->
+      <button class="menu-toggle" aria-hidden="true" title="menu">☰</button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" aria-label="Hero section">
+    <img src="../images/beachbig.avif" alt="Hero screenshot (417)">
+    <div class="hero-content">
+      <h1>The 10 best beaches & snorkel spots in Egypt</h1>
+      <div class="meta">A curated guide — images and content adapted from your screenshots</div>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <main>
+    <p class="intro reveal">From the Mediterranean to the Red Sea, Egypt’s coastline hides turquoise coves, shimmering reefs and long sandy beaches. Below are ten highlights (with captions and planning tips).</p>
+
+    <!-- 1 ALMAZA BAY -->
+    <section id="almaza" class="beach reveal">
+      <h2>1. ALMAZA BAY, MARSA MATRÚH</h2>
+      <div class="sub">Best beach for luxury</div>
+
+      <div class="row">
+        <div class="col image img-zoom">
+          <figure>
+            <img src="../images/beach1.avif" alt="Almaza Bay screenshot (416)">
+            <figcaption>Almaza Bay near Marsa Matruh. Screenshot (416).png</figcaption>
+          </figure>
+        </div>
+        <div class="col">
+          <p>Egypt’s North Coast is known for golden sands and resort life. Almaza Bay is a luxury escape with calm water and nearby facilities.</p>
+          <p class="planning">Planning tip: Visit in spring or autumn, and check resort entry rules (some beaches are private).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 BLUE LAGOON -->
+    <section id="blue-lagoon" class="beach reveal">
+      <h2>2. BLUE LAGOON, DAHAB</h2>
+      <div class="sub">Best for water sports</div>
+
+      <figure class="img-zoom">
+        <img src="../images/beach2.avif" alt="Blue Lagoon screenshot (415)">
+        <figcaption>Blue Lagoon, Dahab. Screenshot (415).png</figcaption>
+      </figure>
+
+      <p>Shallow, sheltered water and steady winds make Blue Lagoon ideal for kitesurfing and windsurfing — a great place for learners and day-trippers.</p>
+    </section>
+
+    <!-- 3 EL ALAMEIN -->
+    <section id="el-alamein" class="beach reveal">
+      <h2>3. EL ALAMEIN, NORTH COAST</h2>
+      <div class="sub">Best beach for glamour</div>
+
+      <figure class="img-zoom">
+        <img src="../images/beach3.avif" alt="El Alamein screenshot (414)">
+        <figcaption>White sand at El Alamein. Screenshot (414).png</figcaption>
+      </figure>
+
+      <p>El Alamein blends historical interest with modern seaside resorts and private beach compounds — ideal if you want comfort and easy access.</p>
+    </section>
+
+    <!-- 4 NAAMA BAY -->
+    <section id="naama" class="beach reveal">
+      <h2>4. NAAMA BAY, SHARM EL SHEIKH</h2>
+      <div class="sub">Best for families</div>
+
+      <figure class="img-zoom">
+        <img src="../images/beach4.avif" alt="Naama Bay screenshot (405)">
+        <figcaption>Naama Bay, Sharm El Sheikh. Screenshot (405).png</figcaption>
+      </figure>
+
+      <p>Purpose-built resort town with white-sand bays, dive schools and family-friendly amenities. Great base for Red Sea snorkeling trips.</p>
+    </section>
+
+    <!-- 5 FJORD BAY -->
+    <section id="fjord" class="beach reveal">
+      <h2>5. FJORD BAY, TABA</h2>
+      <div class="sub">Best for escaping</div>
+
+      <figure class="img-zoom">
+        <img src="../images/beach5.avif" alt="Fjord Bay screenshot (413)">
+        <figcaption>Fjord Bay, Taba. Screenshot (413).png</figcaption>
+      </figure>
+
+      <p>Protected, deep-blue cove with dramatic cliffs and calm reef areas — an ideal place for day-trips and quiet snorkeling.</p>
+    </section>
+
+    <!-- 6 MAHMYA ISLAND -->
+    <section id="mahmya" class="beach reveal">
+      <h2>6. MAHMYA ISLAND, HURGHADA</h2>
+      <div class="sub">Best for snorkeling & dolphins</div>
+
+      <figure class="img-zoom">
+        <img src="../images/beach6.avif" alt="Mahmya screenshot (412)">
+        <figcaption>Mahmya Island beach. Screenshot (412).png</figcaption>
+      </figure>
+
+      <p>Part of a marine park offshore from Hurghada — clear water and coral gardens with controlled visitor numbers to protect the reefs.</p>
+    </section>
+
+    <!-- 7 AL NAYZAK -->
+    <section id="nayzak" class="beach reveal">
+      <h2>7. AL NAYZAK, MARSA ALAM</h2>
+      <div class="sub">Best for swimming and rocky beauty</div>
+
+      <figure class="img-zoom">
+        <img src="../images/beach7.avif" alt="Al Nayzak screenshot (411)">
+        <figcaption>Al Nayzak natural pool. Screenshot (411).png</figcaption>
+      </figure>
+
+      <p>Dramatic eye-shaped pool on a rocky shelf — a beautiful and photogenic snorkel day-trip south of Marsa Alam.</p>
+    </section>
+
+    <!-- 8 ALEXANDRIA -->
+    <section id="alex" class="beach reveal">
+      <h2>8. ALEXANDRIA’S PRIVATE BEACHES</h2>
+      <div class="sub">Best for beach-club fun</div>
+
+      <figure class="img-zoom">
+        <img src="../images/beach8.avif" alt="Alexandria screenshot (410)">
+        <figcaption>Montazah and private beaches. Screenshot (410).png</figcaption>
+      </figure>
+
+      <p>History and seaside leisure combine in Alexandria. Private clubs offer loungers, cafés and guarded swimming areas for a day of comfort.</p>
+    </section>
+
+    <!-- 9 RED SEA REEFS -->
+    <section id="redsea" class="beach reveal">
+      <h2>9. RED SEA REEFS & LAGOONS</h2>
+      <div class="sub">Best for vibrant coral gardens</div>
+
+      <figure class="img-zoom">
+        <img src="../images/beach9.avif" alt="Red Sea screenshot (409)">
+        <figcaption>Coral and crystal water. Screenshot (409).png</figcaption>
+      </figure>
+
+      <p>The Red Sea from Sharm to Marsa Alam is famous for accessible reefs, colorful coral and abundant fish life — perfect for snorkelers and divers alike.</p>
+    </section>
+
+    <!-- 10 MORE -->
+    <section id="more" class="beach reveal">
+      <h2>10. MORE TO EXPLORE</h2>
+      <div class="sub">Hidden coves & day-trip finds</div>
+
+      <figure class="img-zoom">
+        <img src="../images/beach11.avif" alt="More beaches screenshot (408)">
+        <figcaption>Hidden coves and small beaches. Screenshot (408).png</figcaption>
+      </figure>
+
+      <p>Smaller coves, natural pools and less-frequented dive sites await — ask local dive centers for guided trips to these gems.</p>
+    </section>
+
+    <!-- compact gallery containing remaining screenshots (keeps page balanced) -->
+    <section class="beach reveal" aria-label="extra images">
+      <h2>All Beach gallery </h2>
+      <div class="mini-gallery">
+        <figure class="img-zoom"><img src="../images/bea1.jpg" alt="Screenshot (407)"><figcaption>vizag</figcaption></figure>
+        <figure class="img-zoom"><img src="../images/bea2.jpg" alt="Screenshot (406)"><figcaption>Goa</figcaption></figure>
+        <figure class="img-zoom"><img src="../images/bea3.jpg" alt="Screenshot (405)"><figcaption>Blue lagoon</figcaption></figure>
+        <figure class="img-zoom"><img src="../images/bea4.jpg" alt="Screenshot (404)"><figcaption>Taba</figcaption></figure>
+        <figure class="img-zoom"><img src="../images/bea5.jpg" alt="Screenshot (403)"><figcaption>Red Sea</figcaption></figure>
+        <figure class="img-zoom"><img src="../images/bea6.jpg" alt="Screenshot (402)"><figcaption>Nama Bay</figcaption></figure>
+        <figure class="img-zoom"><img src="../images/bea7.jpg" alt="Screenshot (401)"><figcaption>Nuweiba Beach</figcaption></figure>
+        <figure class="img-zoom"><img src="../images/bea8.jpg" alt="Screenshot (400)"><figcaption>Abu Dabbab Bay</figcaption></figure>
+        <figure class="img-zoom"><img src="../images/bea9.jpg" alt="Screenshot (399)"><figcaption>Sinai</figcaption></figure>
+        <figure class="img-zoom"><img src="../images/bea10.jpg" alt="Screenshot (398)"><figcaption>Cleopatra Beach</figcaption></figure>
+        <figure class="img-zoom"><img src="../images/bea11.jpg" alt="Screenshot (397)"><figcaption>Agiba Beach</figcaption></figure>
+        <figure class="img-zoom"><img src="../images/bea12.jpg" alt="Screenshot (396)"><figcaption>EI Gouna Beach</figcaption></figure>
+      </div>
+    </section>
+        <div class="book-card">
+      <img src="../images/gif2-8.webp" class="book-img">
+      <span class="type">GUIDE</span>
+      <h3>POCKET TORONTO</h3>
+      <p class="price">$13.99</p>
+
+      <div class="action-row">
+        <button class="shopBtn">BOOK NOW</button>
+        
+      </div>
+    </div>
+
+  </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="inner">
+      <div class="col">
+        <h4>About this page</h4>
+        <p>Replica-style guide using screenshots you provided. Replace images and text where needed. Built as a single-file, beginner-friendly HTML demo.</p>
+      </div>
+
+      <div class="col">
+        <h4>Quick links</h4>
+        <p><a href="#almaza">Almaza Bay</a><br><a href="#mahmya">Mahmya Island</a><br><a href="#redsea">Red Sea reefs</a></p>
+      </div>
+
+      <div class="col">
+        <h4>Contact</h4>
+        <p>Email: <a href="mailto:you@example.com">you@example.com</a><br><small>Replace with your email</small></p>
+      </div>
+    </div>
+
+    <div style="max-width:var(--max-w);margin:18px auto 0;padding:0 18px;color:#bdbdbd;font-size:13px">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>© 2025 Travel Snapshot • Images: your screenshots</div>
+        <div><a href="#top" style="color:#bdbdbd">Back to top</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-label="Image preview">
+    <button class="lb-close" id="lb-close">Close ✕</button>
+    <img id="lb-img" src="" alt="expanded image">
+  </div>
+
+  <!-- =========================
+       JAVASCRIPT (small & readable)
+       ========================= -->
+  <script>
+      document.querySelectorAll(".shopBtn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      location.href = "booking.html";   // because you are inside /html/montreal.html
+    });
+  });
+    // Smooth scroll for nav links and footer links
+    document.querySelectorAll('nav a, footer a').forEach(a=>{
+      a.addEventListener('click', function(e){
+        const href = this.getAttribute('href');
+        if(!href || href.charAt(0) !== '#') return;
+        e.preventDefault();
+        const el = document.querySelector(href);
+        if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+      });
+    });
+
+    // Lightbox: open any main <figure> image
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lb-img');
+    const lbClose = document.getElementById('lb-close');
+
+    document.querySelectorAll('main figure img').forEach(img=>{
+      img.style.cursor = 'zoom-in';
+      img.addEventListener('click', ()=>{
+        lbImg.src = img.src;
+        lb.classList.add('show');
+        lb.setAttribute('aria-hidden','false');
+      });
+    });
+
+    lbClose.addEventListener('click', ()=>{ lb.classList.remove('show'); lb.setAttribute('aria-hidden','true'); lbImg.src=''; });
+    lb.addEventListener('click', (e)=>{ if(e.target === lb) { lb.classList.remove('show'); lb.setAttribute('aria-hidden','true'); lbImg.src=''; }});
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && lb.classList.contains('show')) { lb.classList.remove('show'); lb.setAttribute('aria-hidden','true'); lbImg.src=''; }});
+
+    // Simple scroll-reveal: add 'visible' class when elements enter viewport
+    const reveals = document.querySelectorAll('.reveal, .img-zoom');
+    const onScroll = () => {
+      const trigger = window.innerHeight * 0.9;
+      reveals.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if(rect.top < trigger) el.classList.add('visible');
+      });
+    };
+    window.addEventListener('scroll', onScroll, {passive:true});
+    window.addEventListener('load', onScroll);
+
+    // Header shadow toggle on scroll
+    const header = document.getElementById('siteHeader');
+    window.addEventListener('scroll', ()=> {
+      if(window.scrollY > 10) header.classList.add('scrolled'); else header.classList.remove('scrolled');
+    }, {passive:true});
+  </script>
+</body>
+</html>

@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Books & Gift Guide — Nani Travel</title>
+
+  <!-- Google font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --accent:#0077ff;
+      --muted:#666;
+      --card-border:#e9e9e9;
+    }
+    *{box-sizing:border-box}
+    body{ font-family:"Poppins",sans-serif; margin:0; color:#222; background:#fafafa; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+
+    /* NAV */
+    .nav {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 28px; background:#fff; border-bottom:1px solid #eee;
+      position:sticky; top:0; z-index:10;
+    }
+    .logo{ font-weight:700; color:var(--accent); display:flex; gap:8px; align-items:center }
+    .nav .right { display:flex; gap:16px; align-items:center; }
+    .cart-link { text-decoration:none; color:#111; font-weight:600; display:flex; gap:8px; align-items:center; cursor:pointer; }
+    #cart-count { background:var(--accent); color:#fff; padding:3px 8px; border-radius:12px; font-weight:700; font-size:13px; }
+
+    /* HERO */
+    .hero { padding:28px; max-width:1200px; margin:0 auto; }
+    .hero h1 { margin:0 0 8px 0; font-size:28px; }
+    .hero p { margin:0; color:var(--muted); }
+
+    /* GRID */
+    .container { max-width:1200px; margin:20px auto; padding:0 18px 60px; }
+    .grid {
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:20px;
+      margin-top:18px;
+    }
+    .card {
+      background:#fff; border-radius:8px; overflow:hidden; border:1px solid var(--card-border);
+      display:flex; flex-direction:column; transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .card:hover { transform:translateY(-6px); box-shadow:0 10px 24px rgba(20,20,20,.06); }
+    .thumb { height:210px; background:#f3f3f3; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .thumb img { width:100%; height:210px; object-fit:cover; display:block; }
+    .meta { padding:14px; flex:1; display:flex; flex-direction:column; }
+    .meta h3 { margin:0 0 6px 0; font-size:16px; }
+    .meta p { margin:0 0 14px 0; color:var(--muted); font-size:13px; }
+    .meta .price-row { margin-top:auto; display:flex; justify-content:space-between; align-items:center; gap:10px; }
+    .price { font-weight:700; color:var(--accent); }
+    .btn { background:var(--accent); color:#fff; border:none; padding:9px 12px; border-radius:22px; cursor:pointer; font-weight:700; }
+    .btn.ghost { background:#f3f3f3; color:#111; }
+
+    /* EXTRA INFO SECTION */
+    .extra-info {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .info-box {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      border: 1px solid #eee;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+    .info-box h2 { margin-bottom: 10px; color: var(--accent); }
+    .subscribe-input { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ddd; margin-top: 6px; }
+    .subscribe-btn { background: var(--accent); color: white; border: none; margin-top: 10px; padding: 8px 14px; border-radius: 20px; cursor: pointer; font-weight: 600; }
+
+    /* toast */
+    .toast {
+      position:fixed; right:18px; bottom:22px; background:#111; color:#fff; padding:10px 14px; border-radius:8px;
+      display:none; z-index:99; font-weight:600;
+    }
+
+    /* FOOTER DESIGN */
+    .footer {
+      background: #0d1b2a;
+      color: white;
+      margin-top: 50px;
+      padding-top: 40px;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      max-width: 1200px;
+      margin: auto;
+      padding: 0 20px 30px;
+    }
+    .footer h3, .footer h4 { margin: 0 0 10px; }
+    .footer-col a { display: block; color: #cbd5e1; text-decoration: none; margin: 6px 0; }
+    .footer-col a:hover { color: white; }
+    .footer-bottom { text-align: center; padding: 14px; background: #09121d; margin-top: 10px; font-size: 14px; }
+
+    /* MODALS (cart / detail) */
+    .modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.45); display:none; align-items:center; justify-content:center; z-index:200; }
+    .modal { width:96%; max-width:720px; background:white; border-radius:10px; overflow:hidden; box-shadow:0 16px 40px rgba(0,0,0,0.4); }
+    .modal-header { padding:12px 16px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center; }
+    .modal-body { max-height:60vh; overflow:auto; padding:16px; }
+    .modal-footer { padding:12px 16px; border-top:1px solid #eee; text-align:right; }
+
+    .cart-item { display:flex; gap:12px; align-items:center; padding:10px 0; border-bottom:1px dashed #eee; }
+    .cart-item img { width:68px; height:56px; object-fit:cover; border-radius:6px; }
+    .cart-item .title { font-weight:600; }
+    .small { font-size:13px; color:var(--muted); }
+
+    .close-btn { background:transparent; border:none; font-size:20px; cursor:pointer; }
+
+    /* responsive */
+    @media (max-width:980px){ .grid{ grid-template-columns: repeat(2,1fr); } .extra-info { grid-template-columns: 1fr 1fr; } }
+    @media (max-width:620px){ .grid{ grid-template-columns: 1fr; } .thumb{ height:180px; } .thumb img{ height:180px } .hero h1{ font-size:22px;} .extra-info { grid-template-columns: 1fr; } .footer-top { grid-template-columns: 1fr; text-align:center; } }
+
+    /* tiny utilities */
+    .muted { color:var(--muted); font-size:13px }
+    .flex { display:flex; gap:8px; align-items:center }
+    .pill { background:#f3f3f3; padding:6px 10px; border-radius:12px; font-weight:600; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="logo" title="Nani Travel">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="transform:translateY(-1px)"><circle cx="12" cy="12" r="10" stroke="#0077ff" stroke-width="1.6"/><path d="M2 12h20" stroke="#0077ff" stroke-width="1.6"/></svg>
+      Nani Travel
+    </div>
+
+    <div class="right">
+      <a class="cart-link" id="openCartBtn">
+        <span>🛒 CART</span>
+        <span id="cart-count">0</span>
+      </a>
+      <a class="cart-link" href="#top">HOME</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <h1>Nani Travels — Gift Guide (demo)</h1>
+
+  </section>
+
+  <!-- PRODUCTS -->
+  <main class="container">
+    <div class="grid" id="productsGrid"></div>
+  </main>
+
+  <!-- EXTRA INFO SECTION -->
+  <section class="extra-info" aria-label="extra info">
+    <div class="info-box">
+      <h2>Why Nani Travel?</h2>
+      <p>We help travelers explore the world with trusted books, guides, and curated gift ideas perfect for every journey.</p>
+    </div>
+
+    <div class="info-box">
+      <h2>Safe & Secure Shopping</h2>
+      <p>All products are handpicked and quality checked. Fast delivery and easy returns guaranteed.</p>
+      <div style="margin-top:12px;" class="small">Free shipping on orders above Rs. 1500</div>
+    </div>
+
+    <div class="info-box">
+      <h2>Subscribe</h2>
+      <p>Get new travel guides, discounts & updates!</p>
+      <input type="email" id="subscribeEmail" placeholder="Enter your email" class="subscribe-input" />
+      <button class="subscribe-btn" id="subscribeBtn">Subscribe</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-top">
+      <div class="footer-col">
+        <h3>Nani Travel</h3>
+        <p>Your trusted partner for books, guides and travel inspiration worldwide.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <a href="#top">Home</a>
+        <a id="footerCartOpen" style="cursor:pointer">Cart</a>
+        <a href="#">Travel Guides</a>
+        <a href="#">Gifts</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <p class="small">Email: support@nanitravel.com</p>
+        <p class="small">Phone: +91 98765 43210</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2025 Nani Travel. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">Added to cart</div>
+
+  <!-- MODAL: CART -->
+  <div class="modal-backdrop" id="cartModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+      <div class="modal-header">
+        <strong id="cartTitle">Your Cart</strong>
+        <div class="flex">
+          <button class="btn ghost" id="clearCartBtn">Clear</button>
+          <button class="close-btn" id="closeCart">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body" id="cartBody">
+        <!-- items injected here -->
+      </div>
+      <div class="modal-footer">
+        <strong id="cartTotal">Total: Rs. 0</strong>
+        <button class="btn" id="checkoutBtn" style="margin-left:12px">Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PRODUCT DETAIL -->
+  <div class="modal-backdrop" id="detailModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+      <div class="modal-header">
+        <strong id="detailTitle">Product</strong>
+        <button class="close-btn" id="closeDetail">&times;</button>
+      </div>
+      <div class="modal-body" id="detailBody">
+        <!-- injected -->
+      </div>
+      <div class="modal-footer" id="detailFooter">
+        <!-- injected -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- placeholder (encoded SVG) used for fallback when an image fails to load
+    const placeholder = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="280">' +
+      '<rect width="100%" height="100%" fill="#eee"/>' +
+      '<text x="50%" y="50%" font-size="18" text-anchor="middle" fill="#999" dy=".3em">No image</text>' +
+      '</svg>'
+    );
+
+    /* ======= NOTE about local image path =======
+       I set g1 to 'images/gif1.avif' below. If your index.html is in the project root and
+       the images folder is at project/images/gif1.avif that will work.
+       If your structure differs, update the path accordingly (examples):
+         - index.html and images/ in same folder: 'images/gif1.avif'
+         - index.html inside html/: use '../images/gif1.avif' if images are outside
+       ================================================== */
+
+    // ---------- sample product list ----------
+    const products = [
+      { id: 'g1', title: 'Best in Travel 2026', price: 850, img: '../images/gif1.avif', desc: 'The official Best in Travel guide for 2026.' },
+      { id: 'g2', title: 'Gifts for Sustainable Travelers', price: 1299, img: '../images/gif2.avif', desc: 'Eco-friendly gift ideas for conscious travelers.' },
+      { id: 'g3', title: 'Gifts for Solo Travelers', price: 599, img: '../images/gif3.avif', desc: 'Compact, useful items for solo adventures.' },
+      { id: 'g4', title: 'Staff Picks', price: 799, img: '../images/gif4.avif', desc: 'Our team’s favorite travel books.' },
+      { id: 'g5', title: 'Island Guide Bestsellers', price: 699, img: '../images/gif5.avif', desc: 'Top picks for island escapes.' },
+      { id: 'g6', title: 'European City Guides', price: 499, img:'../images/gif6.avif', desc: 'Practical guides for city trips in Europe.' },
+      { id: 'g7', title: 'Road Trip USA', price: 1099, img: '../images/gif7.avif', desc: 'Route ideas and travel tips across the USA.' },
+      { id: 'g8', title: 'Wildlife Adventures', price: 1199, img: '../images/gif8.avif', desc: 'Best itineraries for wildlife lovers.' },
+      { id: 'g9', title: 'Weekend Getaways', price: 399, img: '../images/gif1.avif', desc: 'Quick trips perfect for weekends.' },
+      { id: 'g10', title: 'Backpacking Guide', price: 299, img: '../images/gif2.avif', desc: 'Packing lists and budget advice for backpackers.' }
+    ];
+
+    // ---------- render product cards (uses <img> so onerror works) ----------
+    const grid = document.getElementById('productsGrid');
+    products.forEach(p => {
+      const card = document.createElement('article');
+      card.className = 'card';
+
+      card.innerHTML = `
+        <div class="thumb">
+          <img src="${p.img}" alt="${escapeHtml(p.title)}" onerror="this.onerror=null;this.src='${placeholder}'" />
+        </div>
+        <div class="meta">
+          <h3>${escapeHtml(p.title)}</h3>
+          <p>Hardcover / Gift item</p>
+          <div class="price-row">
+            <div class="price">Rs. ${p.price}</div>
+            <div style="display:flex;gap:8px">
+              <button class="btn ghost" onclick="viewDetail('${p.id}')">VIEW</button>
+              <button class="btn" onclick="addToCart('${p.id}')">ADD TO CART</button>
+            </div>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    // ---------- cart utilities (localStorage) ----------
+    function getCart() {
+      return JSON.parse(localStorage.getItem('cart')) || [];
+    }
+
+    function saveCart(cart) {
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCount();
+    }
+
+    function updateCount() {
+      const count = getCart().length;
+      document.getElementById('cart-count').innerText = count;
+    }
+
+    // run on load to set nav count
+    updateCount();
+
+    // add product (ensures price is number) — defensive img default to placeholder
+    function addToCart(id) {
+      const prod = products.find(x => x.id === id);
+      if (!prod) return alert('Product not found');
+
+      const item = {
+        id: prod.id,
+        title: prod.title,
+        price: Number(prod.price),
+        img: prod.img || placeholder, // defensive fallback
+        qty: 1
+      };
+
+      const cart = getCart();
+      // if same product exists, increase qty
+      const exists = cart.find(i => i.id === item.id);
+      if (exists) {
+        exists.qty += 1;
+      } else {
+        cart.push(item);
+      }
+      saveCart(cart);
+
+      // tiny toast confirmation
+      showToast(`"${prod.title}" added to cart`);
+    }
+
+    // toast helper
+    function showToast(msg, time = 1600) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(()=> t.style.display = 'none', time);
+    }
+
+    // ---------- cart modal logic ----------
+    const cartModal = document.getElementById('cartModal');
+    const cartBody = document.getElementById('cartBody');
+    const cartTotalEl = document.getElementById('cartTotal');
+
+    function openCart() {
+      renderCart();
+      cartModal.style.display = 'flex';
+    }
+    function closeCart() { cartModal.style.display = 'none'; }
+
+    document.getElementById('openCartBtn').addEventListener('click', openCart);
+    document.getElementById('footerCartOpen').addEventListener('click', openCart);
+    document.getElementById('closeCart').addEventListener('click', closeCart);
+    cartModal.addEventListener('click', (e)=> { if (e.target === cartModal) closeCart(); });
+
+    function renderCart() {
+      const cart = getCart();
+      cartBody.innerHTML = '';
+      if (!cart.length) {
+        cartBody.innerHTML = '<div class="small">Your cart is empty. Add items to get started.</div>';
+        cartTotalEl.innerText = 'Total: Rs. 0';
+        return;
+      }
+      let total = 0;
+      cart.forEach((it, idx) => {
+        total += it.price * (it.qty || 1);
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        // using placeholder in onerror
+        div.innerHTML = `
+          <img src="${it.img}" alt="${escapeHtml(it.title)}" onerror="this.onerror=null;this.src='${placeholder}'" />
+          <div style="flex:1">
+            <div class="title">${escapeHtml(it.title)}</div>
+            <div class="small">Rs. ${it.price} &nbsp;•&nbsp; Qty: <strong>${it.qty}</strong></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <button class="btn ghost" onclick="changeQty(${idx}, -1)">−</button>
+            <button class="btn ghost" onclick="changeQty(${idx}, 1)">+</button>
+            <button class="btn" style="margin-top:6px" onclick="removeFromCart(${idx})">Remove</button>
+          </div>
+        `;
+        cartBody.appendChild(div);
+      });
+      cartTotalEl.innerText = 'Total: Rs. ' + total;
+    }
+
+    function changeQty(index, delta) {
+      const cart = getCart();
+      if (!cart[index]) return;
+      cart[index].qty = Math.max(1, (cart[index].qty || 1) + delta);
+      saveCart(cart);
+      renderCart();
+    }
+
+    function removeFromCart(index) {
+      const cart = getCart();
+      if (!cart[index]) return;
+      cart.splice(index, 1);
+      saveCart(cart);
+      renderCart();
+    }
+
+    document.getElementById('clearCartBtn').addEventListener('click', ()=>{
+      if (!confirm('Clear cart?')) return;
+      saveCart([]);
+      renderCart();
+    });
+
+    document.getElementById('checkoutBtn').addEventListener('click', ()=>{
+      const cart = getCart();
+      if (!cart.length) return showToast('Cart is empty', 1400);
+      // demo checkout flow (replace with real backend)
+      showToast('Checkout successful — thank you!', 2000);
+      saveCart([]);
+      renderCart();
+      closeCart();
+    });
+
+    // ---------- product detail modal ----------
+    const detailModal = document.getElementById('detailModal');
+    const detailBody = document.getElementById('detailBody');
+    const detailFooter = document.getElementById('detailFooter');
+    document.getElementById('closeDetail').addEventListener('click', ()=> detailModal.style.display = 'none');
+    detailModal.addEventListener('click', (e)=> { if (e.target === detailModal) detailModal.style.display = 'none'; });
+
+    function viewDetail(id) {
+      const p = products.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('detailTitle').innerText = p.title;
+      detailBody.innerHTML = `
+        <div style="display:flex;gap:14px;align-items:flex-start">
+          <img src="${p.img}" alt="${escapeHtml(p.title)}" style="width:160px;height:120px;object-fit:cover;border-radius:8px" onerror="this.onerror=null;this.src='${placeholder}'"/>
+          <div>
+            <p class="small">${escapeHtml(p.desc)}</p>
+            <p style="margin:8px 0"><strong>Rs. ${p.price}</strong></p>
+            <p class="muted">Hardcover / Gift item</p>
+          </div>
+        </div>
+      `;
+      detailFooter.innerHTML = `
+        <button class="btn ghost" onclick="detailModal.style.display='none'">Close</button>
+        <button class="btn" onclick="addToCart('${p.id}'); detailModal.style.display='none'">Add to cart</button>
+      `;
+      detailModal.style.display = 'flex';
+    }
+
+    // ---------- subscribe ----------
+    document.getElementById('subscribeBtn').addEventListener('click', ()=>{
+      const email = document.getElementById('subscribeEmail').value.trim();
+      if (!email || !validateEmail(email)) return showToast('Enter a valid email', 1600);
+      // in real app you'd send to server — here we store locally as demo
+      const subs = JSON.parse(localStorage.getItem('subs') || '[]');
+      subs.push({ email, date: new Date().toISOString() });
+      localStorage.setItem('subs', JSON.stringify(subs));
+      document.getElementById('subscribeEmail').value = '';
+      showToast('Subscribed — thanks!');
+    });
+
+    // ---------- helpers ----------
+    function validateEmail(e){ return /\S+@\S+\.\S+/.test(e); }
+    function escapeHtml(str){ return String(str).replace(/[&<>"'`]/g, (s) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#x60;'}[s])); }
+
+    // close modals on Escape
+    document.addEventListener('keydown', (e)=> {
+      if (e.key === 'Escape') {
+        cartModal.style.display='none';
+        detailModal.style.display='none';
+      }
+    });
+
+    // ensure cart count updates when page loads (in case localStorage changed)
+    window.addEventListener('storage', updateCount);
+
+    // initial small UX: show a welcome pill for first visit
+    (function firstVisitNotice(){
+      if (!localStorage.getItem('seenWelcome')) {
+        showToast('Welcome to Nani Travel — try adding a book to cart!', 2400);
+        localStorage.setItem('seenWelcome','1');
+      }
+    })();
+  </script>
+</body>
+</html>

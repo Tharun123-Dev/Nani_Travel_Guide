@@ -1,0 +1,1347 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Montréal — Single File Demo (Shop & Book)</title>
+
+  <!-- Google font (optional) -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ---------- Basic reset ---------- */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background:#f4f4f4;color:#111;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    /* ---------- NAVBAR (clean) ---------- */
+    .navbar{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:14px 20px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.06);
+    }
+    .brand{display:flex;gap:12px;align-items:center}
+    .lp-logo{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#2b9df4,#2266ff);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+    .navlinks{display:flex;gap:18px;font-weight:600;color:#444}
+
+    /* ---------- PAGE WRAPPER ---------- */
+    .container{max-width:1200px;margin:28px auto;padding:0 16px}
+
+    /* ---------- HERO (default view) ---------- */
+    .hero{
+      display:grid;grid-template-columns:420px 1fr;min-height:72vh;
+      border-radius:10px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,.12);
+      background:#1f2628;color:#fff;
+    }
+    .left{padding:48px 40px;display:flex;flex-direction:column;gap:18px}
+    .breadcrumb{font-size:13px;background:rgba(255,255,255,.06);padding:7px 10px;border-radius:4px;width:max-content;letter-spacing:1px}
+    .title{font-size:82px;line-height:.9;font-weight:800}
+    .subtitle{font-size:28px;opacity:.92}
+    .book-area{display:flex;gap:18px;align-items:flex-start;margin-top:6px}
+    .book-cover{width:130px;border-radius:6px;box-shadow:0 8px 18px rgba(0,0,0,.4)}
+    .book-meta .meta-label{font-size:12px;opacity:.75}
+    .book-meta .book-title{font-weight:700;margin-top:6px}
+    .price{margin-top:8px;font-size:18px;opacity:.95}
+    .btn-row{display:flex;gap:12px;margin-top:12px}
+    .btn{padding:12px 20px;border-radius:30px;font-weight:700;cursor:pointer;border:0}
+    .btn-shop{background:#fff;color:#1f2628}
+    .btn-book{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.2)}
+
+    .right{position:relative;background:#ddd}
+    .hero-img{width:100%;height:100%;object-fit:cover;display:block}
+    .credit{position:absolute;left:18px;bottom:18px;font-size:12px;background:rgba(0,0,0,.45);padding:6px 8px;color:#fff;border-radius:4px}
+
+    /* ---------- ACTION PAGES (shop/book) ---------- */
+    .page { display:none; }           /* hide non-active pages */
+    .page.active { display:block; }  /* show active page */
+
+    .card{
+      background:#fff;border-radius:12px;padding:22px;box-shadow:0 8px 30px rgba(0,0,0,.08);
+    }
+    .center{max-width:880px;margin:20px auto}
+
+    .back-btn{display:inline-block;margin-bottom:12px;color:#666;text-decoration:none;font-weight:600}
+    .shop-row{display:flex;gap:18px;align-items:center}
+    .thumb{width:160px;border-radius:8px;box-shadow:0 8px 20px rgba(0,0,0,.08)}
+    .actions{margin-top:14px;display:flex;gap:12px}
+    .primary{background:#2266ff;color:#fff;padding:12px 18px;border-radius:28px;border:0;cursor:pointer;font-weight:700}
+    .secondary{background:#444;color:#fff;padding:12px 18px;border-radius:28px;border:0;cursor:pointer;font-weight:700}
+
+    form{display:grid;gap:12px}
+    input,textarea,select{padding:12px;border-radius:8px;border:1px solid #ddd;font-size:15px}
+    .row{display:flex;gap:12px}
+    .note{font-size:13px;color:#666}
+
+    /* ---------- UTIL ---------- */
+    .hide-mobile{display:inline}
+    @media (max-width:480px){ .hide-mobile{display:none} }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width:1000px){
+      .hero{grid-template-columns:1fr;min-height:62vh}
+      .title{font-size:56px}
+      .left{padding:28px}
+    }
+    @media (max-width:480px){
+      .title{font-size:40px}
+      .book-cover{width:96px}
+      .btn{padding:10px 14px}
+      .navlinks{display:none}
+    }
+    /* ================= OVERVIEW SECTION ================= */
+
+.overview-section{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  padding:60px 0;
+  max-width:1200px;
+  margin:auto;
+  gap:20px;
+}
+
+.overview-left{
+  width:60%;
+}
+
+.overview-left h2{
+  font-size:40px;
+  margin-bottom:20px;
+  color:#222;
+}
+
+.overview-left p{
+  font-size:18px;
+  line-height:1.6;
+  color:#333;
+}
+
+/* Right side card */
+.overview-card{
+  width:32%;
+  background:#e9e8e4;
+  padding:30px 24px;
+  border-radius:6px;
+  text-align:center;
+}
+
+.overview-card .icon{
+  font-size:40px;
+  margin-bottom:14px;
+}
+
+.overview-card h3{
+  font-size:20px;
+  margin-bottom:10px;
+  color:#222;
+}
+
+.overview-card p{
+  font-size:15px;
+  color:#555;
+  margin-bottom:18px;
+  line-height:1.4;
+}
+
+.insp-btn{
+  width:100%;
+  padding:12px;
+  border-radius:30px;
+  border:0;
+  background:#111;
+  color:#fff;
+  font-size:14px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+/* ================= RESPONSIVE ================= */
+@media(max-width:900px){
+  .overview-section{
+    flex-direction:column;
+    gap:32px;
+  }
+  .overview-left,
+  .overview-card{
+    width:100%;
+  }
+}
+
+@media(max-width:480px){
+  .overview-left h2{ font-size:30px; }
+  .overview-left p{ font-size:16px; }
+  .overview-card h3{ font-size:18px; }
+}
+
+/* ===================== ATTRACTIONS SECTION ===================== */
+
+.attractions-section{
+  max-width:1200px;
+  margin:60px auto;
+  padding:0 16px;
+}
+
+.attractions-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:26px;
+}
+
+.attractions-header h2{
+  font-size:40px;
+  font-weight:700;
+}
+
+.controls{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.explore{
+  text-decoration:none;
+  color:#000;
+  font-weight:600;
+  border-bottom:1px solid #000;
+}
+
+.scroll-btn{
+  width:40px;
+  height:40px;
+  border:0;
+  background:#eee;
+  cursor:pointer;
+  border-radius:4px;
+  font-size:18px;
+}
+
+.scroll-btn:hover{
+  background:#ccc;
+}
+
+.attractions-slider{
+  display:flex;
+  gap:26px;
+  overflow-x:auto;
+  scroll-behavior:smooth;
+  padding-bottom:10px;
+}
+
+.attraction-card{
+  min-width:260px;
+  max-width:260px;
+  background:#fff;
+  border-radius:6px;
+  overflow:hidden;
+  position:relative;
+  transition:0.3s;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+.attraction-card .card-img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+}
+
+.card-info{
+  padding:12px;
+}
+
+.type{
+  font-size:12px;
+  color:#888;
+  letter-spacing:1px;
+}
+
+.card-info h3{
+  font-size:16px;
+  margin-top:6px;
+}
+
+/* Hover reveal button */
+.discover{
+  position:absolute;
+  left:0;
+  bottom:-40px;
+  width:100%;
+  padding:12px;
+  background:#111;
+  color:#fff;
+  text-align:center;
+  font-weight:600;
+  font-size:14px;
+  transition:0.3s;
+}
+
+.attraction-card:hover{
+  transform:translateY(-6px);
+}
+
+.attraction-card:hover .discover{
+  bottom:0;
+}
+
+/* ===================== RESPONSIVE ===================== */
+
+@media(max-width:480px){
+  .attractions-header{
+    flex-direction:column;
+    gap:12px;
+  }
+  .attractions-header h2{ font-size:28px; }
+}
+
+/* ===================== ARTICLE SECTION ===================== */
+
+.article-section{
+  max-width:1200px;
+  margin:60px auto;
+  padding:0 16px;
+}
+
+.small-title{
+  text-align:center;
+  font-size:12px;
+  letter-spacing:2px;
+  color:#555;
+  margin-bottom:10px;
+}
+
+.big-title{
+  text-align:center;
+  font-size:36px;
+  font-weight:700;
+  margin-bottom:40px;
+}
+
+.article-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:20px;
+}
+
+.article-card{
+  background:#dcdcdc;
+  padding:24px;
+  border-radius:6px;
+  cursor:pointer;
+  transition:0.3s;
+  border:1px solid transparent;
+}
+
+.article-card:hover{
+  background:#ffb8f4; /* pink hover */
+  border-color:#000;
+}
+
+.article-card .icon{
+  font-size:26px;
+  margin-bottom:8px;
+}
+
+.article-card h3{
+  font-size:18px;
+  margin-bottom:10px;
+}
+
+.article-card p{
+  font-size:14px;
+  color:#444;
+  line-height:1.5;
+  margin-bottom:18px;
+}
+
+.read-more{
+  display:inline-block;
+  margin-top:10px;
+  font-size:14px;
+  font-weight:600;
+  color:#000;
+  text-decoration:none;
+  border-bottom:1px solid #000;
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media(max-width:900px){
+  .article-grid{
+    grid-template-columns:repeat(2, 1fr);
+  }
+}
+
+@media(max-width:500px){
+  .article-grid{
+    grid-template-columns:1fr;
+  }
+  .big-title{font-size:26px;}
+}
+/* ===================== REAL CANADA SECTION ===================== */
+
+.canada-hero{
+  display:flex;
+  width:100%;
+  height:420px;
+  border-radius:10px;
+  overflow:hidden;
+  margin:60px 0;
+}
+
+.canada-left{
+  width:40%;
+  background:#111;
+  color:#fff;
+  padding:60px 40px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.canada-left .small{
+  letter-spacing:2px;
+  font-size:14px;
+  margin-bottom:12px;
+  opacity:0.8;
+}
+
+.canada-left h2{
+  font-size:42px;
+  line-height:1.2;
+  margin-bottom:12px;
+}
+
+.canada-left .desc{
+  margin-bottom:20px;
+  opacity:0.9;
+}
+
+.lp-logo-text{
+  font-size:18px;
+  margin-bottom:24px;
+}
+
+.start-btn{
+  padding:14px 28px;
+  border-radius:40px;
+  border:0;
+  cursor:pointer;
+  background:#fff;
+  color:#000;
+  font-weight:600;
+  font-size:15px;
+  transition:0.2s;
+}
+
+.start-btn:hover{
+  background:#ddd;
+}
+
+.canada-right{
+  width:60%;
+}
+
+.canada-right img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* Responsive */
+@media(max-width:800px){
+  .canada-hero{
+    flex-direction:column;
+    height:auto;
+  }
+  .canada-left, .canada-right{
+    width:100%;
+    height:auto;
+  }
+}
+.books-section{
+  max-width:1200px;
+  margin:60px auto;
+  padding:0 16px;
+}
+
+.books-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:40px;
+}
+
+.books-header h2{
+  font-size:38px;
+  font-weight:700;
+}
+
+.explore-link{
+  font-weight:600;
+  text-decoration:none;
+  border-bottom:1px solid #000;
+  color:#000;
+}
+
+.books-grid{
+  display:flex;
+  justify-content:center;
+  gap:40px;
+}
+
+.book-card{
+  width:260px;
+  text-align:center;
+}
+
+.book-img{
+  width:100%;
+  height:340px;
+  object-fit:cover;
+  border-radius:6px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.1);
+}
+
+.type{
+  font-size:12px;
+  letter-spacing:1px;
+  color:#777;
+  display:block;
+  margin-top:14px;
+}
+
+.book-card h3{
+  margin:8px 0;
+  font-size:16px;
+}
+
+.price{
+  margin:8px 0;
+  font-weight:600;
+}
+
+.action-row{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:12px;
+}
+
+.action-row button{
+  padding:8px 18px;
+  border:none;
+  border-radius:25px;
+  cursor:pointer;
+  font-weight:600;
+  background:#0057e7;
+  color:#fff;
+}
+
+.action-row button:hover{
+  background:#003f9e;
+}
+
+@media(max-width:768px){
+  .books-grid{
+    flex-direction:column;
+    align-items:center;
+  }
+}
+
+  
+  .site-footer{background:#1f2628;color:#e6e6e6;padding:40px 16px 20px;font-family: 'Poppins', sans-serif;width: 100% !important;}
+  .footer-inner{max-width:1200px;display:grid;grid-template-columns:1fr 1fr 260px;gap:28px;align-items:start}
+  .footer-left{padding-right:8px}
+  .footer-brand{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .logo-circle{width:58px;height:58px;border-radius:10px;background:#fff;color:#111;display:flex;align-items:center;justify-content:center;font-weight:800}
+  .brand-text .tag{font-size:12px;color:#bfbfbf}
+  .follow-title{font-weight:700;margin-bottom:8px}
+  .social{display:flex;gap:10px;margin-bottom:18px}
+  .soc{display:inline-flex;width:34px;height:34px;align-items:center;justify-content:center;border-radius:6px;background:transparent;color:#e6e6e6;text-decoration:none}
+  .soc svg{opacity:0.95}
+  hr{border:none;border-top:1px solid rgba(255,255,255,0.05);margin:18px 0}
+  .newsletter h4{font-size:20px;margin-bottom:6px}
+  .muted{color:#bfbfbf;margin-bottom:12px}
+  .newsletter-form{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+  .newsletter-form input{flex:1;padding:12px;border-radius:4px;border:0;background:#f1f1f1;color:#111}
+  .pill{padding:10px 18px;border-radius:28px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:#fff;cursor:pointer}
+  .pill:hover{background:rgba(255,255,255,0.04)}
+  .note{font-size:13px;color:#bfbfbf}
+
+  .footer-columns{display:flex;gap:20px;justify-content:space-between}
+  .col h5{font-size:15px;margin-bottom:8px;color:#fff}
+  .col ul{list-style:none;padding:0;margin:0}
+  .col li{margin:8px 0}
+  .col a{color:#d6d6d6;text-decoration:none}
+  .col a:hover{text-decoration:underline;color:#fff}
+
+  .footer-right{display:flex;flex-direction:column;align-items:flex-end;gap:18px}
+  .language-pill{background:#fff;color:#111;padding:8px 12px;border-radius:40px;display:flex;gap:8px;align-items:center}
+  #langBtn{background:transparent;border:0;font-weight:700;cursor:pointer}
+  .copyright{font-size:13px;color:#bfbfbf;text-align:right}
+
+  /* Responsive */
+  @media(max-width:980px){
+    .footer-inner{grid-template-columns:1fr;gap:28px}
+    .footer-right{align-items:flex-start}
+  }
+  @media(max-width:520px){
+    .newsletter-form{flex-direction:column;align-items:stretch}
+    .newsletter-form input{width:100%}
+    .footer-columns{flex-direction:column}
+    .footer-right{align-items:flex-start}
+  }
+
+
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="lp-logo">lp</div>
+      <div>
+        <div style="font-weight:700">Nani Travel (Demo)</div>
+        <div style="font-size:12px;opacity:.6">Travel Guides</div>
+      </div>
+    </div>
+
+    <nav class="navlinks" aria-hidden="true">
+      <div>DESTINATIONS</div>
+      <div>BOOKS</div>
+      <div>TRIPS</div>
+      <div>STORIES</div>
+    </nav>
+  </header>
+
+  <!-- CONTAINER for all views -->
+  <main class="container">
+
+    <!-- ====== HERO / HOME VIEW (default) ====== -->
+    <section id="homeView" class="page active" aria-labelledby="homeTitle">
+      <div class="hero" role="main" aria-labelledby="homeTitle">
+        <div class="left">
+          <div class="breadcrumb">NORTH AMERICA ▶ CANADA</div>
+          <h1 id="homeTitle" class="title">MONTRÉAL</h1>
+          <div class="subtitle">CANADA</div>
+
+          <div class="book-area">
+            <img src="../images/mont1.avif" alt="Book cover" class="book-cover" />
+            <div class="book-meta">
+              <div class="meta-label">SHOP</div>
+              <div class="book-title">BRITISH COLUMBIA &amp; THE<br>CANADIAN ROCKIES</div>
+              <div class="price" id="priceText">$24.99</div>
+
+              <div class="btn-row">
+                <!-- click handlers switch views -->
+                <button class="btn btn-shop" id="goShop">SHOP</button>
+                <button class="btn btn-book" id="goBook">BOOK</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:auto;color:rgba(255,255,255,.9)">Plan your trip — sample itinerary &amp; tips</div>
+        </div>
+
+        <aside class="right" aria-hidden="false">
+          <img src="../images/mont1.avif" class="hero-img" alt="Montreal scene" />
+          <div class="credit">© Perry Mastrovito / Getty Images</div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ====== SHOP VIEW ====== -->
+    <section id="shopView" class="page" aria-labelledby="shopTitle">
+      <div class="center card">
+        <a class="back-btn" href="#" id="backFromShop">← Back to Home</a>
+        <h2 id="shopTitle">Shop: Travel Guide</h2>
+
+        <div class="shop-row" style="margin-top:12px">
+          <img src="../images/mont1.avif" alt="Book" class="thumb">
+          <div style="flex:1">
+            <div style="font-size:12px;opacity:.8">Selected Book</div>
+            <div style="font-weight:800;font-size:18px;margin-top:6px">British Columbia &amp; The Canadian Rockies</div>
+            <div id="shopPrice" class="price">$24.99</div>
+
+            <div class="actions">
+              <button class="primary" id="addToCart">Add to Cart</button>
+              <button class="secondary" id="shopBack">Return</button>
+            </div>
+
+            <p style="margin-top:12px;color:#555">Demo shop page — the Add to Cart button shows a simple confirmation (no real checkout).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== BOOK VIEW ====== -->
+    <section id="bookView" class="page" aria-labelledby="bookTitle">
+      <div class="center card">
+        <a class="back-btn" href="#" id="backFromBook">← Back to Home</a>
+        <h2 id="bookTitle">Book Your Montréal Trip</h2>
+        <p style="color:#555;margin-top:6px">Fill contact details and confirm booking. (Demo — no server)</p>
+
+        <form id="bookingForm" style="margin-top:12px" onsubmit="return false;">
+          <input type="text" id="fullname" placeholder="Full name" required>
+          <div class="row">
+            <input type="tel" id="phone" placeholder="Phone number" required>
+            <input type="email" id="email" placeholder="Email address" required>
+          </div>
+
+          <div class="row">
+            <input type="number" id="travelers" placeholder="Travellers" min="1" style="width:40%">
+            <input type="text" id="cost" value="$24.99" readonly style="width:60%">
+          </div>
+
+          <textarea id="notes" rows="4" placeholder="Special requests (optional)"></textarea>
+
+          <div style="display:flex;gap:12px;margin-top:8px;flex-wrap:wrap">
+            <button class="primary" id="confirmBooking">Confirm Booking</button>
+            <button class="secondary" id="cancelBooking">Cancel</button>
+          </div>
+
+          <p class="note">By confirming you accept demo terms. Real bookings require a server.</p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ================= OVERVIEW SECTION ================= -->
+<section class="overview-section">
+
+  <div class="overview-left">
+    <h2>Overview</h2>
+    <p>
+      Head to bilingual Montréal to enjoy a taste of French culture in a North American
+      city that's in love with festivals, the arts, good food and enjoying life to the hilt.
+    </p>
+  </div>
+
+  <div class="overview-card">
+    <div class="icon">✈️</div>
+    <h3>Leave the planning to a local expert</h3>
+    <p>
+      Experience the real Montréal. Let a local<br>
+      expert handle the planning for you.
+    </p>
+    <button class="insp-btn">GET INSPIRED</button>
+  </div>
+
+</section>
+
+<!-- ===================== MUST-SEE ATTRACTIONS ===================== -->
+<section class="attractions-section">
+
+  <div class="attractions-header">
+    <h2>Must-see attractions</h2>
+
+    <div class="controls">
+      <a href="#" class="explore">EXPLORE ALL</a>
+      <button class="scroll-btn" id="leftBtn">←</button>
+      <button class="scroll-btn" id="rightBtn">→</button>
+    </div>
+  </div>
+
+  <div class="attractions-slider" id="slider">
+
+    <!-- CARD 1 -->
+    <div class="attraction-card">
+      <img src="../images/b10.webp" class="card-img">
+      <div class="card-info">
+        <span class="type">ATTRACTION IN MONTRÉAL</span>
+        <h3>Jardin Botanique</h3>
+      </div>
+      <div class="discover">DISCOVER →</div>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="attraction-card">
+      <img src="../images/b11.webp" class="card-img">
+      <div class="card-info">
+        <span class="type">ATTRACTION IN MONTRÉAL</span>
+        <h3>Biodôme</h3>
+      </div>
+      <div class="discover">DISCOVER →</div>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="attraction-card">
+      <img src="../images/b17.webp" class="card-img">
+      <div class="card-info">
+        <span class="type">ATTRACTION IN OLD MONTRÉAL</span>
+        <h3>Place d'Armes</h3>
+      </div>
+      <div class="discover">DISCOVER →</div>
+    </div>
+
+    <!-- CARD 4 -->
+    <div class="attraction-card">
+      <img src="../images/b19.webp" class="card-img">
+      <div class="card-info">
+        <span class="type">ATTRACTION IN MONTRÉAL</span>
+        <h3>Oratoire St-Joseph</h3>
+      </div>
+      <div class="discover">DISCOVER →</div>
+    </div>
+
+    <!-- CARD 5 -->
+    <div class="attraction-card">
+      <img src="../images/book2.jpg" class="card-img">
+      <div class="card-info">
+        <span class="type">ATTRACTION IN MONTRÉAL</span>
+        <h3>Parc du Mont-Royal</h3>
+      </div>
+      <div class="discover">DISCOVER →</div>
+    </div>
+
+    <!-- CARD 6 -->
+    <div class="attraction-card">
+      <img src="../images/b12.webp" class="card-img">
+      <div class="card-info">
+        <span class="type">ATTRACTION IN MONTRÉAL</span>
+        <h3>Musée des Beaux-Arts</h3>
+      </div>
+      <div class="discover">DISCOVER →</div>
+    </div>
+
+    <!-- CARD 7 -->
+    <div class="attraction-card">
+      <img src="../images/dest3.avif" class="card-img">
+      <div class="card-info">
+        <span class="type">ATTRACTION IN OLD MONTRÉAL</span>
+        <h3>Basilique Notre-Dame</h3>
+      </div>
+      <div class="discover">DISCOVER →</div>
+    </div>
+
+    <!-- CARD 8 -->
+    <div class="attraction-card">
+      <img src="../images/dest4.avif" class="card-img">
+      <div class="card-info">
+        <span class="type">ATTRACTION IN MONTRÉAL</span>
+        <h3>Pointe-à-Callière Museum</h3>
+      </div>
+      <div class="discover">DISCOVER →</div>
+    </div>
+
+    <!-- CARD 9 -->
+    <div class="attraction-card">
+      <img src="../images/dub2.avif" class="card-img">
+      <div class="card-info">
+        <span class="type">ATTRACTION IN MONTRÉAL</span>
+        <h3>Le Vieux Port</h3>
+      </div>
+      <div class="discover">DISCOVER →</div>
+    </div>
+
+    <!-- CARD 10 -->
+    <div class="attraction-card">
+      <img src="../images/gif2-2.webp" class="card-img">
+      <div class="card-info">
+        <span class="type">ATTRACTION IN MONTRÉAL</span>
+        <h3>Parc Jean-Drapeau</h3>
+      </div>
+      <div class="discover">DISCOVER →</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ===================== ARTICLE SECTION ===================== -->
+<section class="article-section">
+
+  <p class="small-title">PLANNING TOOLS</p>
+  <h2 class="big-title">Expert guidance to help you plan your trip</h2>
+
+  <div class="article-grid">
+
+    <!-- CARD 1 -->
+    <div class="article-card" onclick="openArticle('Best Things To Do')">
+      <div class="icon">🏆</div>
+      <h3>BEST THINGS TO DO</h3>
+      <p>From exploring cool neighborhoods and museums to parties and night events.</p>
+      <span class="read-more">READ FULL ARTICLE →</span>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="article-card" onclick="openArticle('Things To Know')">
+      <div class="icon">📘</div>
+      <h3>THINGS TO KNOW</h3>
+      <p>Learn the important stuff for your trip to Montréal: weather, language, tips.</p>
+      <span class="read-more">READ FULL ARTICLE →</span>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="article-card" onclick="openArticle('Transportation')">
+      <div class="icon">🚌</div>
+      <h3>TRANSPORTATION</h3>
+      <p>Travel Montréal using metro, buses and bike paths — easy and comfortable.</p>
+      <span class="read-more">READ FULL ARTICLE →</span>
+    </div>
+
+    <!-- CARD 4 -->
+    <div class="article-card" onclick="openArticle('Free Things To Do')">
+      <div class="icon">🆓</div>
+      <h3>FREE THINGS TO DO</h3>
+      <p>Public art, outdoors, and nine amazing activities you can do without spending.</p>
+      <span class="read-more">READ FULL ARTICLE →</span>
+    </div>
+
+    <!-- CARD 5 -->
+    <div class="article-card" onclick="openArticle('Best Neighborhoods')">
+      <div class="icon">🏘️</div>
+      <h3>BEST NEIGHBORHOODS</h3>
+      <p>Discover Montréal’s beautiful boroughs full of charm and culture.</p>
+      <span class="read-more">READ FULL ARTICLE →</span>
+    </div>
+
+    <!-- CARD 6 -->
+    <div class="article-card" onclick="openArticle('Day Trips')">
+      <div class="icon">🌄</div>
+      <h3>DAY TRIPS</h3>
+      <p>Explore outside Montréal — mountains, lakes, villages and scenic routes.</p>
+      <span class="read-more">READ FULL ARTICLE →</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== REAL CANADA SECTION ===================== -->
+<section class="canada-hero">
+
+  <div class="canada-left">
+    <p class="small">PLAN WITH A LOCAL</p>
+    <h2>Experience the real<br>Canada</h2>
+    <p class="desc">Let a local expert craft your dream trip.</p>
+
+    <div class="lp-logo-text">lonely planet <strong>journeys</strong></div>
+
+    <button class="start-btn" id="startBtn">
+      GET STARTED →
+    </button>
+  </div>
+
+  <div class="canada-right">
+    <img src="../images/mont3.avif" alt="Canada" />
+  </div>
+
+</section>
+
+
+
+<!-- ===================== MUST-SEE ATTRACTIONS ===================== -->
+<section class="attractions-section">
+
+  <div class="attractions-header">
+    <h2>Must-see attractions</h2>
+
+    <div class="controls">
+      <a href="#" class="explore">EXPLORE ALL</a>
+      <button class="scroll-btn" id="leftBtn">←</button>
+      <button class="scroll-btn" id="rightBtn">→</button>
+    </div>
+  </div>
+
+  <div class="attractions-slider" id="slider">
+
+    <!-- CARD 1 -->
+    <div class="attraction-card">
+      <img src="../images/b10.webp" class="card-img">
+      <div class="card-info">
+        <span class="type">ATTRACTION IN MONTRÉAL</span>
+        <h3>Jardin Botanique</h3>
+      </div>
+      <div class="discover">DISCOVER →</div>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="attraction-card">
+      <img src="../images/b11.webp" class="card-img">
+      <div class="card-info">
+        <span class="type">ATTRACTION IN MONTRÉAL</span>
+        <h3>Biodôme</h3>
+      </div>
+      <div class="discover">DISCOVER →</div>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="attraction-card">
+      <img src="../images/b17.webp" class="card-img">
+      <div class="card-info">
+        <span class="type">ATTRACTION IN OLD MONTRÉAL</span>
+        <h3>Place d'Armes</h3>
+      </div>
+      <div class="discover">DISCOVER →</div>
+    </div>
+
+    <!-- CARD 4 -->
+    <div class="attraction-card">
+      <img src="../images/b19.webp" class="card-img">
+      <div class="card-info">
+        <span class="type">ATTRACTION IN MONTRÉAL</span>
+        <h3>Oratoire St-Joseph</h3>
+      </div>
+      <div class="discover">DISCOVER →</div>
+    </div>
+
+    <!-- CARD 5 -->
+    <div class="attraction-card">
+      <img src="../images/book2.jpg" class="card-img">
+      <div class="card-info">
+        <span class="type">ATTRACTION IN MONTRÉAL</span>
+        <h3>Parc du Mont-Royal</h3>
+      </div>
+      <div class="discover">DISCOVER →</div>
+    </div>
+
+    <!-- CARD 6 -->
+    <div class="attraction-card">
+      <img src="../images/b12.webp" class="card-img">
+      <div class="card-info">
+        <span class="type">ATTRACTION IN MONTRÉAL</span>
+        <h3>Musée des Beaux-Arts</h3>
+      </div>
+      <div class="discover">DISCOVER →</div>
+    </div>
+
+    <!-- CARD 7 -->
+    <div class="attraction-card">
+      <img src="../images/dest3.avif" class="card-img">
+      <div class="card-info">
+        <span class="type">ATTRACTION IN OLD MONTRÉAL</span>
+        <h3>Basilique Notre-Dame</h3>
+      </div>
+      <div class="discover">DISCOVER →</div>
+    </div>
+
+    <!-- CARD 8 -->
+    <div class="attraction-card">
+      <img src="../images/dest4.avif" class="card-img">
+      <div class="card-info">
+        <span class="type">ATTRACTION IN MONTRÉAL</span>
+        <h3>Pointe-à-Callière Museum</h3>
+      </div>
+      <div class="discover">DISCOVER →</div>
+    </div>
+
+    <!-- CARD 9 -->
+    <div class="attraction-card">
+      <img src="../images/dub2.avif" class="card-img">
+      <div class="card-info">
+        <span class="type">ATTRACTION IN MONTRÉAL</span>
+        <h3>Le Vieux Port</h3>
+      </div>
+      <div class="discover">DISCOVER →</div>
+    </div>
+
+    <!-- CARD 10 -->
+    <div class="attraction-card">
+      <img src="../images/gif2-2.webp" class="card-img">
+      <div class="card-info">
+        <span class="type">ATTRACTION IN MONTRÉAL</span>
+        <h3>Parc Jean-Drapeau</h3>
+      </div>
+      <div class="discover">DISCOVER →</div>
+    </div>
+
+  </div>
+</section>
+
+
+<section class="books-section">
+  
+  <div class="books-header">
+    <h2>Get a book. Get inspired.<br>Get exploring.</h2>
+    <a href="#" class="explore-link">EXPLORE ALL BOOKS</a>
+  </div>
+
+  <div class="books-grid">
+
+    <!-- BOOK 1 -->
+    <div class="book-card">
+      <img src="../images/road2.avif" class="book-img">
+      <span class="type">GUIDE</span>
+      <h3>BRITISH COLUMBIA </h3>
+      <p class="price">$24.99</p>
+
+      <div class="action-row">
+        <button class="shopBtn">SHOP</button>
+        <button class="bookBtn">BOOK</button>
+      </div>
+    </div>
+
+    <!-- BOOK 2 -->
+    <div class="book-card">
+      <img src="../images/gif6.avif" class="book-img">
+      <span class="type">GUIDE</span>
+      <h3>ATLANTIC CANADA</h3>
+      <p class="price">$24.99</p>
+
+      <div class="action-row">
+        <button class="shopBtn">SHOP</button>
+        <button class="bookBtn">BOOK</button>
+      </div>
+    </div>
+
+    <!-- BOOK 3 -->
+    <div class="book-card">
+      <img src="../images/gif2-8.webp" class="book-img">
+      <span class="type">GUIDE</span>
+      <h3>POCKET TORONTO</h3>
+      <p class="price">$13.99</p>
+
+      <div class="action-row">
+        <button class="shopBtn">SHOP</button>
+        <button class="bookBtn">BOOK</button>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <!-- Left: brand, social, newsletter -->
+    <div class="footer-left">
+      <div class="footer-brand">
+        <div class="logo-circle">lp</div>
+        <div class="brand-text">
+          <strong>Nani Travel Planner</strong>
+          <div class="tag">OUR GUIDES. YOUR STORIES.</div>
+        </div>
+      </div>
+
+      <div class="follow">
+        <div class="follow-title">Follow us</div>
+        <div class="social">
+          <!-- simple inline SVG icons -->
+          <a href="#" aria-label="Facebook" class="soc" title="Facebook">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M22 12a10 10 0 10-11.5 9.9v-7h-2.2V12h2.2V9.8c0-2.1 1.2-3.3 3-3.3.9 0 1.8.1 1.8.1v2h-1c-1 0-1.3.6-1.3 1.2V12h2.3l-.4 2.9h-1.9v7A10 10 0 0022 12z"/></svg>
+          </a>
+          <a href="#" aria-label="Instagram" class="soc" title="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm5 6.1A3.1 3.1 0 1015.1 11 3.1 3.1 0 0012 8.1zm5.5-.6a1.1 1.1 0 11-1.1-1.1 1.1 1.1 0 011.1 1.1z"/></svg>
+          </a>
+          <a href="#" aria-label="X" class="soc" title="X / Twitter">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M22 5.9c-.6.3-1.2.5-1.8.6.6-.4 1.2-1 1.4-1.7-.6.4-1.3.7-2 .9C18.7 5 17.9 4.5 17 4.5c-1.8 0-3.1 1.7-2.7 3.4-2.3-.1-4.4-1.2-5.8-2.8-.8 1.4-.3 3.3 1 4.3-.5 0-1-.2-1.4-.4v.1c0 1.6 1.1 2.9 2.6 3.2-.5.1-1 .1-1.4.1.4 1.1 1.4 1.8 2.6 1.8-1 .8-2.2 1.2-3.4 1.2h-.6c1.3.9 2.8 1.4 4.4 1.4C16 18 20 13.2 20 8.8v-.3c.9-.7 1.6-1.6 2-2.6z"/></svg>
+          </a>
+          <a href="#" aria-label="YouTube" class="soc" title="YouTube">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M23 7s-.2-1.6-.8-2.3C21.1 4 18.9 3.9 12 3.9S2.9 4 1.8 4.7 1 7 1 7 1 8.9 1.8 10.6C2.9 11.3 5.1 11.4 12 11.4s9.1-.1 10.2-.8c.6-.7.8-2.3.8-2.3zM10 9.6v4.8l4-2.4-4-2.4z"/></svg>
+          </a>
+          <a href="#" aria-label="Pinterest" class="soc" title="Pinterest">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a9.9 9.9 0 00-3.8 19.1c-.1-.8-.2-2 .1-2.9.3-.9 2-6.1 2-6.1s-.6-1.1-.6-2.6c0-2.4 1.4-4.2 3.1-4.2 1.5 0 2.2 1.1 2.2 2.4 0 1.5-.9 3.7-1.4 5.8-.4 1.7.9 3.1 2.6 3.1 3.1 0 5.4-3.2 5.4-7.8C21.5 6 17 2 12 2z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="newsletter">
+        <h4>Join our Newsletter</h4>
+        <p class="muted">Get exclusive discounts &amp; more!</p>
+
+        <div class="newsletter-form">
+          <input id="newsletterEmail" type="email" placeholder="EMAIL ADDRESS" />
+          <button id="newsletterBtn" class="pill">SIGN UP</button>
+        </div>
+
+        <p class="note">Subscribe to newsletters and promotions. Read our <a href="#" class="underline">Privacy Policy</a>.</p>
+      </div>
+    </div>
+
+    <!-- Middle: links columns -->
+    <div class="footer-columns">
+      <div class="col">
+        <h5>TOP DESTINATIONS</h5>
+        <ul>
+          <li><a href="#">New York City</a></li>
+          <li><a href="#">Paris</a></li>
+          <li><a href="#">Italy</a></li>
+          <li><a href="#">Costa Rica</a></li>
+          <li><a href="#">Japan</a></li>
+          <li><a href="#">USA</a></li>
+        </ul>
+      </div>
+
+      <div class="col">
+        <h5>TRAVEL INTERESTS</h5>
+        <ul>
+          <li><a href="#">Adventure Travel</a></li>
+          <li><a href="#">Art &amp; Culture</a></li>
+          <li><a href="#">Beaches &amp; Islands</a></li>
+          <li><a href="#">Food and Drink</a></li>
+          <li><a href="#">Road Trips</a></li>
+          <li><a href="#">Wildlife</a></li>
+        </ul>
+      </div>
+
+      <div class="col">
+        <h5>ABOUT US</h5>
+        <ul>
+          <li><a href="#">About Nani Travel</a></li>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms &amp; Conditions</a></li>
+          <li><a href="#">Sitemap</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Right: language pill -->
+    <div class="footer-right">
+      <div class="language-pill" id="langPill">
+        <span>LANGUAGE:</span>
+        <button id="langBtn">ENGLISH ▾</button>
+      </div>
+      <div class="copyright">© 2025 Nani Travel Planner. All rights reserved.</div>
+    </div>
+
+  </div>
+</footer>
+
+
+
+
+  </main>
+
+  <script>
+
+
+  // All SHOP buttons
+  document.querySelectorAll(".shopBtn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      location.href = "booking.html";   // because you are inside /html/montreal.html
+    });
+  });
+
+  // All BOOK buttons
+  document.querySelectorAll(".bookBtn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      location.href = "booking.html";   // same folder
+    });
+  });
+
+
+
+
+    /* ---------- Simple single-page navigation: show/hide sections ---------- */
+    const homeView = document.getElementById('homeView');
+    const shopView = document.getElementById('shopView');
+    const bookView = document.getElementById('bookView');
+
+    const goShop = document.getElementById('goShop');
+    const goBook = document.getElementById('goBook');
+    const backFromShop = document.getElementById('backFromShop');
+    const backFromBook = document.getElementById('backFromBook');
+    const shopBack = document.getElementById('shopBack');
+
+    function show(view){
+      // hide all
+      [homeView, shopView, bookView].forEach(v => v.classList.remove('active'));
+      // show requested
+      view.classList.add('active');
+      // scroll to top for better UX
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    // wire buttons
+    goShop.addEventListener('click', () => show(shopView));
+    goBook.addEventListener('click', () => show(bookView));
+    backFromShop.addEventListener('click', (e)=>{ e.preventDefault(); show(homeView); });
+    backFromBook.addEventListener('click', (e)=>{ e.preventDefault(); show(homeView); });
+    shopBack.addEventListener('click', ()=> show(homeView));
+
+    /* ---------- Shop actions (simple demo) ---------- */
+    document.getElementById('addToCart').addEventListener('click', () => {
+      // demo confirm
+      const ok = confirm('Add "British Columbia & The Canadian Rockies" to cart for $24.99?');
+      if(ok) alert('Item added to cart (demo).');
+    });
+
+    /* ---------- Booking actions (simple validation + demo) ---------- */
+    document.getElementById('confirmBooking').addEventListener('click', () => {
+      const name = document.getElementById('fullname').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const email = document.getElementById('email').value.trim();
+
+      if(!name || !phone || !email){
+        alert('Please fill name, phone and email to confirm booking.');
+        return;
+      }
+
+      // success flow (demo)
+      alert('Booking successful! We will contact you at ' + email + '. (Demo)');
+      // reset form for convenience
+      document.getElementById('bookingForm').reset();
+      // return to home
+      show(homeView);
+    });
+
+    document.getElementById('cancelBooking').addEventListener('click', (e) => {
+      e.preventDefault();
+      // simply go back to home
+      show(homeView);
+    });
+
+    /* Optional: keyboard Accessibility: Esc returns to home */
+    window.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape') show(homeView);
+    });
+
+    /* small: set cost fields from price text in hero (keeps consistent) */
+    try {
+      const priceHero = document.getElementById('priceText').textContent.trim();
+      document.getElementById('shopPrice').textContent = priceHero;
+      document.getElementById('cost').value = priceHero;
+    } catch(e){ /* ignore if elements missing */ }
+
+
+
+  const slider = document.getElementById("slider");
+  const leftBtn = document.getElementById("leftBtn");
+  const rightBtn = document.getElementById("rightBtn");
+
+  rightBtn.onclick = () => {
+    slider.scrollBy({ left: 300, behavior: "smooth" });
+  };
+
+  leftBtn.onclick = () => {
+    slider.scrollBy({ left: -300, behavior: "smooth" });
+  };
+
+
+
+  //article
+  function openArticle(name){
+    alert("Opening article: " + name);
+  }
+
+//ship type
+
+  document.getElementById("startBtn").onclick = () => {
+    alert("A local expert will help plan your trip! (Demo action)");
+  };
+
+ document.getElementById('newsletterBtn').addEventListener('click', function(){
+    const email = document.getElementById('newsletterEmail').value.trim();
+    if(!email) return alert('Please enter an email address.');
+    // Demo: just show a friendly message
+    alert('Thanks — we will send updates to: ' + email);
+    document.getElementById('newsletterEmail').value = '';
+  });
+
+  // Language pill demo
+  document.getElementById('langBtn').addEventListener('click', () => {
+    alert('Language selector (demo). Replace with real language switcher if needed.');
+  });
+
+
+  </script>
+</body>
+</html>

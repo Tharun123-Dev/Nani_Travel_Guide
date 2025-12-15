@@ -1,0 +1,195 @@
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    background: #f5f5f5;
+}
+
+/* ===================== BLUE NEWSLETTER BOX ===================== */
+.newsletter-box {
+    background: #0047ba;
+    color: white;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.newsletter-box h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.input-row {
+    margin-top: 20px;
+}
+
+.input-row input {
+    padding: 12px;
+    width: 300px;
+    border: none;
+    font-size: 14px;
+}
+
+.input-row button {
+    padding: 12px 20px;
+    background: white;
+    border: none;
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.success-msg {
+    color: #00ff99;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+footer {
+    background: #1a1a1a;
+    color: white;
+    padding: 50px 70px;
+    font-family: Arial;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: 280px 1fr 200px;
+    gap: 40px;
+}
+
+/* Left Block */
+.footer-left h3 {
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.social-icons i {
+    color: white;
+    font-size: 22px;
+    margin-right: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.social-icons i:hover {
+    color: #ccc;
+}
+
+
+.footer-line {
+    border: 0;
+    border-top: 1px solid #333;
+    margin: 25px 0;
+}
+
+#footerEmail {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    margin-top: 10px;
+}
+
+.signup-btn {
+    margin-top: 12px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    background: white;
+    color: black;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Middle Column Section */
+.footer-columns {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 40px;
+}
+
+.column-title {
+    color: #cfcfcf;
+    font-size: 14px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.column a {
+    display: block;
+    color: #ddd;
+    padding: 3px 0;
+    cursor: pointer;
+}
+
+.column a:hover {
+    color: #fff;
+}
+
+/* Language Menu */
+.language-box {
+    text-align: right;
+}
+
+.lang-btn {
+    background: #333;
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    cursor: pointer;
+    border-radius: 25px;
+}
+
+.lang-menu {
+    display: none;
+    background: #222;
+    padding: 10px;
+    list-style: none;
+    margin-top: 10px;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.lang-menu li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.lang-menu li:hover {
+    background: #444;
+}
+
+/* Confirmation Message */
+.success-msg {
+    color: #40ff90;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+/* Bottom Copyright */
+copyright {
+    text-align: center;
+    margin-top: 30px;
+    color: #aaa;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-columns {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .language-box {
+        text-align: left;
+        margin-top: 20px;
+    }
+}

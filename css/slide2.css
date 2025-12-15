@@ -1,0 +1,122 @@
+/* ===============================
+   FEATURED DESTINATIONS
+================================ */
+
+.feature-title {
+    font-size: 42px;
+    font-weight: 900;
+}
+
+.view-all {
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: underline;
+    color: black;
+    cursor: pointer;
+}
+
+.arrow-btn {
+    width: 40px;
+    height: 40px;
+    background: #eee;
+    border: none;
+    border-radius: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.arrow-btn:hover {
+    background: #ccc;
+}
+
+/* SCROLL WRAPPER */
+.dest-wrapper {
+    display: flex;
+    gap: 25px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding-bottom: 10px;
+}
+.dest-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+/* CARD */
+.destination-card {
+    min-width: 280px;
+    height: 380px;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.destination-card:hover {
+    transform: scale(1.03);
+}
+
+/* IMAGE */
+.destination-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: 0.4s;
+}
+
+/* Darken image on hover */
+.destination-card:hover img {
+    filter: brightness(60%);
+}
+
+/* TEXT OVERLAY */
+.card-overlay {
+    position: absolute;
+    bottom: 25px;
+    left: 20px;
+    z-index: 3;
+    color: white;
+}
+
+/* COUNTRY */
+.country {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* CITY */
+.place {
+    font-size: 24px;
+    font-weight: 800;
+}
+
+/* DISCOVER BUTTON (HIDDEN BY DEFAULT) */
+.discover-btn {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: 0.4s;
+    background: white;
+    color: black;
+    border: none;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: bold;
+    border-radius: 20px;
+}
+
+/* SHOW BUTTON ON HOVER */
+.destination-card:hover .discover-btn {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .feature-title {
+        font-size: 18px;
+    }
+    .destination-card {
+        min-width: 230px;
+        height: 320px;
+    }
+}

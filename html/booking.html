@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Trip Demo — Book & Bookmark (toggleable panel)</title>
+
+  <!-- Poppins font (optional) -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ========= basic reset & vars ========= */
+    :root{
+      --accent:#0b66c2;
+      --muted:#6b6b6b;
+      --max-width:1320px;
+      --page-pad:20px;
+      --panel-width:320px; /* full width of the panel when open */
+      --panel-collapsed:40px; /* width when collapsed (small tab) */
+      --panel-top:120px;
+    }
+    *{box-sizing:border-box}
+    body{font-family:'Poppins',sans-serif;margin:0;color:#111;background:#fff}
+    a{color:inherit}
+
+    /* ========= header (wider + booking status) ========= */
+    header{
+      position:sticky;top:0;background:#fff;z-index:100;border-bottom:1px solid #eee;
+      box-shadow:0 6px 18px rgba(6,10,20,0.03);
+    }
+    .nav{
+      max-width:var(--max-width);margin:0 auto;padding:14px var(--page-pad);
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+    }
+    .brand{font-weight:800;color:var(--accent);font-size:24px}
+    .nav-right{display:flex;gap:12px;align-items:center}
+    .nav a{color:var(--muted);padding:6px 8px;border-radius:6px}
+    .nav a:hover{background:#f4f7fb;color:var(--accent)}
+    #bookNowBtn{
+      background:var(--accent);color:#fff;border:none;padding:10px 16px;border-radius:28px;cursor:pointer;font-weight:700;
+      box-shadow:0 8px 22px rgba(11,102,194,0.12);
+    }
+    .booked { display:inline-flex;align-items:center;gap:8px;background:#0b7f44;border-radius:28px;padding:8px 12px;color:#fff;font-weight:700; }
+
+    /* ========= page container ========= */
+    .container{max-width:var(--max-width);margin:0 auto;padding:26px var(--page-pad)}
+
+    /* ========= hero (split) ========= */
+    .hero{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch;margin-top:12px}
+    .hero-left{background:#111;color:#fff;padding:36px;border-radius:8px;display:flex;flex-direction:column;justify-content:center}
+    .eyebrow{display:inline-block;background:#f5c900;color:#111;padding:6px 10px;border-radius:4px;font-weight:700;margin-bottom:14px}
+    .hero-left h1{margin:0;font-size:40px;line-height:1.03}
+    .hero-left p{margin-top:12px;color:#d7d7d7;max-width:540px}
+    .hero-right img{width:100%;height:520px;object-fit:cover;border-radius:8px}
+
+    /* ========= sections ========= */
+    section{padding:34px 0;border-bottom:1px solid #f4f4f4}
+    h2{font-size:28px;margin:0 0 8px}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+
+    /* ========= gallery ========= */
+    .gallery{display:flex;gap:12px;overflow-x:auto;padding:10px 0;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
+    .gcard{flex:0 0 48%;min-width:48%;height:320px;border-radius:8px;overflow:hidden;box-shadow:0 8px 28px rgba(6,10,20,0.06)}
+    .gcard img{width:100%;height:100%;object-fit:cover;display:block}
+    .gallery-controls{display:flex;justify-content:flex-end;gap:8px;margin-bottom:8px}
+    .small-btn{border:1px solid #ddd;background:#fff;padding:8px 10px;border-radius:6px;cursor:pointer}
+
+    /* ========= video ========= */
+    .video-wrap video{width:100%;height:420px;object-fit:cover;border-radius:8px;display:block;background:#000}
+
+    /* ========= booking form & success ========= */
+    .booking-wrap{display:flex;gap:24px;align-items:flex-start;padding-bottom:40px}
+    .booking-form{background:#fff;border-radius:8px;padding:18px;box-shadow:0 6px 18px rgba(6,10,20,0.04);max-width:520px;width:100%}
+    .booking-form label{display:block;font-weight:600;margin:10px 0 6px}
+    .booking-form input{width:100%;padding:10px;border:1px solid #e6e6e6;border-radius:6px;font-size:15px}
+    .booking-form button{margin-top:12px;padding:10px 12px;border-radius:6px;background:var(--accent);color:#fff;border:none;cursor:pointer}
+    .success-msg{display:none;background:#e6ffef;border-left:4px solid #1fa67a;padding:12px;border-radius:6px;margin-top:12px;color:#075a39}
+
+    /* ========= fixed iframe bookmark panel (now toggleable) ========= */
+    .iframe-panel{
+      position:fixed;
+      right:12px;
+      top:var(--panel-top);
+      width:var(--panel-width);
+      height:420px;
+      background:#fff;
+      border-radius:8px;
+      border:1px solid #eee;
+      box-shadow:0 18px 40px rgba(6,10,20,0.12);
+      overflow:hidden;
+      z-index:99;
+      display:flex;
+      flex-direction:column;
+      transition:width 0.28s ease, transform 0.28s ease;
+    }
+
+    /* collapsed state: narrow tab */
+    .iframe-panel.collapsed{
+      width:var(--panel-collapsed);
+    }
+
+    /* header inside panel: contains toggle button */
+    .iframe-panel .panel-head{
+      height:44px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 10px;
+      border-bottom:1px solid #f4f4f4;
+      background:#fafafa;
+    }
+    .iframe-panel .panel-title{font-weight:700;font-size:14px;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+    /* toggle button styles (small circle) */
+    .panel-toggle{
+      width:30px;height:30px;border-radius:50%;border:1px solid #ddd;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;
+      font-weight:700;box-shadow:0 4px 10px rgba(6,10,20,0.06)
+    }
+
+    /* when collapsed we hide iframe and show a small icon; done via child selectors */
+    .iframe-panel iframe{flex:1;border:0;transition:opacity 0.18s ease}
+    .iframe-panel.collapsed iframe{opacity:0;pointer-events:none}
+
+    /* collapsed: rotate content/icon to show a small tab label using pseudo-element? Simpler: show tooltip-like label */
+    .iframe-panel.collapsed .panel-title{display:none}
+    .iframe-panel.collapsed .panel-footer{display:none}
+
+    /* small vertical label visible when collapsed (absolute positioned) */
+    .iframe-panel.collapsed::after{
+      content: "Bookmarks";
+      position:absolute;
+      left:-46px;
+      top:calc(50% - 14px);
+      width:120px;
+      transform:rotate(-90deg);
+      transform-origin:center;
+      text-align:center;
+      background:var(--accent);
+      color:#fff;
+      padding:6px 8px;
+      border-radius:6px;
+      font-size:13px;
+      box-shadow:0 6px 18px rgba(6,10,20,0.12);
+    }
+
+    .panel-footer{padding:8px;text-align:center;font-size:12px;color:var(--muted);border-top:1px solid #f4f4f4}
+
+    /* ========= footer ========= */
+    footer{padding:36px 0;background:#111;color:#e6e6e6;margin-top:30px}
+    footer .foot-inner{max-width:var(--max-width);margin:0 auto;padding:0 var(--page-pad);display:flex;justify-content:space-between;gap:20px;align-items:flex-start}
+
+    /* ========= responsiveness ========= */
+    @media (max-width:1100px){
+      .hero-right img{height:420px}
+      .gcard{min-width:60%}
+      .iframe-panel{display:none}
+    }
+    @media (max-width:800px){
+      .hero{grid-template-columns:1fr}
+      .hero-right img{height:300px}
+      .two-col{grid-template-columns:1fr}
+      .booking-wrap{flex-direction:column}
+      .iframe-panel{display:none}
+    }
+    @media (max-width:420px){
+      .brand{font-size:20px}
+      .hero-left h1{font-size:28px}
+    }
+
+    /* small helper styles for bookmark controls */
+    .bookmark-controls{display:flex;gap:10px;margin-top:12px}
+    .bookmark-controls button{padding:8px 10px;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer}
+  </style>
+</head>
+<body>
+
+  <!-- ========== header ========== -->
+  <header>
+    <div class="nav">
+      <div class="brand">Nani Demo</div>
+      <div class="nav-right">
+        <nav style="display:flex;gap:12px;align-items:center">
+          <a href="#overview">Overview</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#video">Video</a>
+          <a href="#booking">Booking</a>
+        </nav>
+
+        <!-- Book button (changes when booked) -->
+        <button id="bookNowBtn" title="Book this trip">BOOK THIS TRIP</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== main container ========== -->
+  <main class="container">
+
+    <!-- HERO -->
+    <section class="hero" aria-label="Hero">
+      <div class="hero-left">
+        <span class="eyebrow">ITINERARY CRAFTED BY LOCAL EXPERTS</span>
+        <h1>Best of Southern Spain &amp; Cádiz — 11 Days</h1>
+        <p>Replace images & videos with your own. This demo uses simple HTML/CSS and minimal JavaScript to keep things beginner-friendly.</p>
+
+        <!-- Bookmark controls near hero for convenience (adds section bookmarks to panel) -->
+        <div class="bookmark-controls" style="margin-top:18px">
+          <button onclick="addBookmark('Overview','overview')">Bookmark Overview</button>
+          <button onclick="addBookmark('Gallery','gallery')">Bookmark Gallery</button>
+          <button onclick="addBookmark('Video','video')">Bookmark Video</button>
+          <button onclick="addBookmark('Booking','booking')">Bookmark Booking</button>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <!-- Replace with your own image at images/hero-right.jpg -->
+        <img src="../images/booknow1.avif" alt="Hero image (replace)">
+      </div>
+    </section>
+
+    <!-- OVERVIEW -->
+    <section id="overview">
+      <h2>Overview</h2>
+      <p style="color:var(--muted)">Drive through Andalucía's villages, explore the Alhambra and coastal Cádiz. Replace this text and images with your own content.</p>
+
+      <div class="two-col" style="margin-top:16px">
+        <div>
+          <img src="../images/booknow2.avif" alt="Palace (replace)" style="border-radius:8px;height:320px;object-fit:cover">
+        </div>
+        <div>
+          <h3>Accommodations</h3>
+          <p style="color:var(--muted)">Stay in locally curated hotels close to historic sites. Phone: +34 958 222 362</p>
+          <h3 style="margin-top:12px">Transportation</h3>
+          <p style="color:var(--muted)">Car recommended; trains and transfers also available.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h2>Image Gallery</h2>
+        <div class="gallery-controls">
+          <button class="small-btn" onclick="galleryScroll(false)">← Prev</button>
+          <button class="small-btn" onclick="galleryScroll(true)">Next →</button>
+        </div>
+      </div>
+
+      <div class="gallery" id="theGallery" tabindex="0" aria-label="../images/booknow1.avif">
+        <div class="gcard"><img src="../images/booknow1.avif" alt="Gallery 1"></div>
+        <div class="gcard"><img src="../images/booknow5.avif" alt="Gallery 2"></div>
+        <div class="gcard"><img src="../images/booknow2.avif" alt="Gallery 3"></div>
+        <div class="gcard"><img src="../images/booknow3.avif" alt="Gallery 4"></div>
+      </div>
+    </section>
+
+    <!-- VIDEO -->
+    <section id="video">
+      <h2>Video Preview</h2>
+      <p style="color:var(--muted)">Replace the MP4 below with your own file located at media/trip-video.mp4</p>
+      <div class="video-wrap" style="margin-top:12px">
+        <video controls poster="images/.jpg">
+          <source src="../images/booknowvideo.mp4" type="video/mp4">
+          Your browser doesn't support HTML5 video.
+        </video>
+      </div>
+    </section>
+
+    <!-- BOOKING -->
+    <section id="booking" style="padding-top:18px">
+      <h2>Book this trip</h2>
+      <p style="color:var(--muted)">Click the BOOK THIS TRIP button in the header to open a small booking dialog that asks phone and email and shows the cost. On submit we update the navbar to show the booked state.</p>
+
+      <div class="booking-wrap" style="margin-top:14px">
+        <!-- For visitors who prefer the full form on the page (not required) -->
+        <form class="booking-form" onsubmit="return false">
+          <label>Full name</label>
+          <input placeholder="Your full name (optional on-page)">
+
+          <label>Email</label>
+          <input placeholder="you@example.com (optional on-page)">
+
+          <label>Phone</label>
+          <input placeholder="+91 98765 43210 (optional on-page)">
+
+          <div style="margin-top:12px;color:var(--muted)">Prefer the quick dialog? Click the <strong>BOOK THIS TRIP</strong> button in the header.</div>
+
+          <div id="pageSuccess" class="success-msg" role="status" aria-live="polite"></div>
+        </form>
+
+        <aside style="width:320px;flex:0 0 320px">
+          <div style="background:#fafafa;padding:14px;border-radius:8px">
+            <strong>Trip summary</strong>
+            <p style="margin:6px 0;color:var(--muted)">11 days / 10 nights — price from <strong>$3,850 / person</strong></p>
+            <p style="color:var(--muted);font-size:13px">After booking with the dialog you will see the Book button updated in the header.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== TOGGLEABLE FIXED IFRAME BOOKMARK PANEL ========== -->
+  <div class="iframe-panel" id="iframePanel" aria-hidden="false" title="Bookmarks panel">
+    <div class="panel-head">
+      <div class="panel-title">Bookmarks</div>
+      <!-- Toggle button: when clicked it will collapse/expand the panel -->
+      <button class="panel-toggle" id="panelToggle" title="Open / close bookmarks">✕</button>
+    </div>
+
+    <iframe id="bookmarkFrame"
+      srcdoc='
+        <style>body{font-family:Arial,Helvetica,sans-serif;margin:0;padding:12px;color:#111}h3{font-size:15px;margin:0 0 10px}ul{padding-left:16px}li{margin:10px 0;padding:8px;background:#f7f7f7;border-radius:6px;list-style:none;font-size:14px} a{color:#0b66c2;text-decoration:none}</style>
+        <h3>Your bookmarks</h3>
+        <div id="list"><p style="color:#666">No bookmarks yet — use the buttons on the page to add one.</p></div>
+      '>
+    </iframe>
+
+    <div class="panel-footer">Click "Bookmark" to save the section here</div>
+  </div>
+
+  <!-- ========== booking dialog (built-in) — minimal JS ========= -->
+  <dialog id="bookDialog" style="border-radius:8px;padding:18px;width:320px;max-width:calc(100% - 40px)">
+    <form method="dialog" id="bookDialogForm" onsubmit="return false" style="display:flex;flex-direction:column;gap:8px">
+      <h3 style="margin:0 0 6px">Quick booking</h3>
+
+      <!-- show cost (readonly) -->
+      <label style="font-weight:700;font-size:13px">Cost</label>
+      <input id="dlgCost" readonly value="$3,850 / person" style="background:#f4f4f4;border:1px solid #eee;padding:8px;border-radius:6px">
+
+      <label style="font-weight:700;font-size:13px">Email</label>
+      <input id="dlgEmail" type="email" placeholder="you@example.com" required style="padding:8px;border-radius:6px;border:1px solid #ddd">
+
+      <label style="font-weight:700;font-size:13px">Phone</label>
+      <input id="dlgPhone" type="tel" placeholder="+91 98765 43210" required style="padding:8px;border-radius:6px;border:1px solid #ddd">
+
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+        <button type="button" onclick="closeDialog()" style="padding:8px 10px;border-radius:6px;border:1px solid #ddd;background:#fff">Cancel</button>
+        <button id="dlgSubmit" type="button" style="padding:8px 12px;border-radius:6px;background:var(--accent);color:#fff;border:none">Confirm & Book</button>
+      </div>
+
+      <div id="dlgError" style="color:#b11212;font-size:13px;display:none;margin-top:6px"></div>
+    </form>
+  </dialog>
+
+  <!-- ========== footer ========== -->
+  <footer>
+    <div class="foot-inner">
+      <div>
+        <div style="font-weight:700;font-size:18px">Nani Demo</div>
+        <div style="color:#bbb;margin-top:6px">Nani demo — this is client-side only.</div>
+      </div>
+
+      <div style="color:#ccc;display:flex;gap:24px">
+        <div>
+          <div style="font-weight:700;margin-bottom:6px">Destinations</div>
+          <div>Spain<br>Italy<br>France</div>
+        </div>
+        <div>
+          <div style="font-weight:700;margin-bottom:6px">Support</div>
+          <div>Contact<br>FAQs<br>Privacy</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== SCRIPT: minimal, clear, commented ========== -->
+  <script>
+    // References
+    const bookBtn = document.getElementById('bookNowBtn');
+    const dialog = document.getElementById('bookDialog');
+    const dlgSubmit = document.getElementById('dlgSubmit');
+    const dlgEmail = document.getElementById('dlgEmail');
+    const dlgPhone = document.getElementById('dlgPhone');
+    const dlgError = document.getElementById('dlgError');
+    const dlgCost = document.getElementById('dlgCost');
+    const bookmarkFrame = document.getElementById('bookmarkFrame');
+
+    const iframePanel = document.getElementById('iframePanel');
+    const panelToggle = document.getElementById('panelToggle');
+
+    // Default cost
+    const COST_TEXT = '$3,850 / person';
+    dlgCost.value = COST_TEXT;
+
+    // Panel toggle: collapse/open the right-side bookmark panel
+    panelToggle.addEventListener('click', function () {
+      iframePanel.classList.toggle('collapsed');
+      // change icon/text of toggle (simple)
+      panelToggle.textContent = iframePanel.classList.contains('collapsed') ? '≡' : '✕';
+      panelToggle.title = iframePanel.classList.contains('collapsed') ? 'Open bookmarks' : 'Close bookmarks';
+    });
+
+    // Initialize toggle button icon depending on initial state
+    panelToggle.textContent = '✕';
+    panelToggle.title = 'Close bookmarks';
+
+    // BOOK button opens booking dialog (quick)
+    bookBtn.addEventListener('click', () => {
+      if (bookBtn.dataset.booked === 'true') {
+        alert('You already booked this trip — check the header for details.');
+        return;
+      }
+      dlgEmail.value = '';
+      dlgPhone.value = '';
+      dlgError.style.display = 'none';
+      if (typeof dialog.showModal === "function") dialog.showModal();
+      else { alert('Booking dialog not supported — fill the booking form on the page.'); document.getElementById('booking').scrollIntoView({ behavior: 'smooth' }); }
+    });
+
+    function closeDialog() {
+      if (typeof dialog.close === "function") dialog.close();
+    }
+
+    // Handle dialog confirm
+    dlgSubmit.addEventListener('click', function () {
+      const email = dlgEmail.value.trim();
+      const phone = dlgPhone.value.trim();
+
+      if (!email || !email.includes('@')) { showDialogError('Enter a valid email address.'); return; }
+      const phoneDigits = phone.replace(/\D/g,'');
+      if (!phone || phoneDigits.length < 7) { showDialogError('Enter a valid phone number.'); return; }
+
+      dlgError.style.display = 'none';
+      closeDialog();
+
+      // mark as booked
+      bookBtn.dataset.booked = 'true';
+      bookBtn.innerHTML = '✔ Booked';
+      bookBtn.classList.add('booked');
+      bookBtn.title = 'You have booked this trip';
+
+      // show page success
+      const pageSuccess = document.getElementById('pageSuccess');
+      pageSuccess.innerHTML = `<strong>Booking successful!</strong>
+        <div style="margin-top:8px">We saved your booking details (demo only): <br>
+        <strong>Email:</strong> ${escapeHtml(email)} <br>
+        <strong>Phone:</strong> ${escapeHtml(phone)} <br>
+        <strong>Cost:</strong> ${escapeHtml(COST_TEXT)}</div>`;
+      pageSuccess.style.display = 'block';
+      pageSuccess.scrollIntoView({behavior:'smooth', block:'center'});
+
+      // append small note next to the book button
+      addSmallNavbarNote(email, phone);
+
+      // add a bookmark automatically
+      addBookmark('Booking','booking', `Booked: ${email}`);
+    });
+
+    function showDialogError(msg) {
+      dlgError.textContent = msg;
+      dlgError.style.display = 'block';
+    }
+
+    function addSmallNavbarNote(email, phone) {
+      if (document.getElementById('navBookingNote')) return;
+      const note = document.createElement('div');
+      note.id = 'navBookingNote';
+      note.style.fontSize = '13px';
+      note.style.color = '#333';
+      note.style.marginLeft = '10px';
+      note.innerHTML = `<span style="font-weight:600;color:#fff;background:#165e3d;padding:6px 10px;border-radius:20px">Booked</span>
+                        <div style="font-size:11px;color:var(--muted);margin-top:3px"> ${escapeHtml(email)} • ${escapeHtml(phone)}</div>`;
+      bookBtn.parentNode.appendChild(note);
+    }
+
+    // Gallery scroll helper
+    function galleryScroll(forward){
+      const g = document.getElementById('theGallery');
+      if (!g) return;
+      const first = g.querySelector('.gcard');
+      const gap = 12;
+      const step = first ? Math.round(first.getBoundingClientRect().width + gap) : Math.round(g.clientWidth * 0.5);
+      g.scrollBy({ left: forward ? step : -step, behavior: 'smooth' });
+    }
+
+    // Bookmark helper: append to iframe content (srcdoc = same-origin)
+    function addBookmark(title, anchorId, extra='') {
+      const html = `<li><a href="#${encodeURIComponent(anchorId)}" onclick="parent.location.hash='${anchorId}'">${escapeHtml(title)}</a>
+                    ${ extra ? '<div style="font-size:12px;color:#777;margin-top:6px">'+escapeHtml(extra)+'</div>' : '' }
+                    </li>`;
+
+      const frameDoc = bookmarkFrame.contentDocument || bookmarkFrame.contentWindow.document;
+      if (!frameDoc) { alert('Bookmark panel not available.'); return; }
+
+      let list = frameDoc.getElementById('bk-ul');
+      if (!list) {
+        const listContainer = frameDoc.getElementById('list');
+        listContainer.innerHTML = '<ul id="bk-ul" style="padding-left:12px;margin:0"></ul>';
+        list = frameDoc.getElementById('bk-ul');
+      }
+
+      const temp = frameDoc.createElement('div');
+      temp.innerHTML = html;
+      const li = temp.firstElementChild;
+      list.appendChild(li);
+    }
+
+    // helper to escape HTML
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, function (m) {
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m];
+      });
+    }
+
+    // keyboard arrow navigation for gallery when focused
+    const galleryEl = document.getElementById('theGallery');
+    if (galleryEl) {
+      galleryEl.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowLeft') galleryScroll(false);
+        if (e.key === 'ArrowRight') galleryScroll(true);
+      });
+    }
+
+    // lazy-load images
+    document.addEventListener('DOMContentLoaded', function(){
+      document.querySelectorAll('img').forEach(img => { if (!img.loading) img.loading = 'lazy'; });
+    });
+  </script>
+</body>
+</html>

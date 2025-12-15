@@ -1,0 +1,82 @@
+/* ================================
+   ADVERTISEMENT SECTION
+================================ */
+.advert-section {
+  background: #fafafa;
+}
+
+/* Card container */
+.advert-card {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* Ad image */
+.advert-img {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+  transition: 0.3s;
+}
+
+/* Hover effect */
+.advert-card:hover .advert-img {
+  transform: scale(1.05);
+  filter: brightness(80%);
+}
+
+/* Text overlay */
+.advert-text {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  color: white;
+}
+
+.advert-sub {
+  font-size: 14px;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+.advert-title {
+  font-size: 32px;
+  font-weight: 900;
+  margin-top: 6px;
+}
+
+/* Button */
+.advert-btn {
+  margin-top: 10px;
+  padding: 8px 18px;
+  border: 2px solid white;
+  border-radius: 25px;
+  background: transparent;
+  color: rgb(99, 36, 234);
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  background-color: aquamarine;
+}
+
+.advert-btn:hover {
+  background: white;
+  color: black;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .advert-img {
+    height: 250px;
+  }
+  .advert-title {
+    font-size: 22px;
+  }
+  .advert-text {
+    bottom: 15px;
+    left: 15px;
+  }
+}

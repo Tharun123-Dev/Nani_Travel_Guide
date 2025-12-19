@@ -34,6 +34,31 @@ body{
     100% {background-position: 0% 50%;}
 }
 
+/* ---------- LOADER ---------- */
+.loader-overlay{
+    position:fixed;
+    inset:0;
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(6px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.loader{
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    border:6px solid rgba(255,255,255,0.3);
+    border-top:6px solid #fff;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin{
+    to{ transform: rotate(360deg); }
+}
+
 /* ---------- GLASS CARD ---------- */
 .login-card{
     width:380px;
@@ -90,7 +115,7 @@ body{
     transform: translateY(-3px) scale(1.02);
 }
 
-/* ---------- SIGNUP LINK (NEW) ---------- */
+/* ---------- SIGNUP LINK ---------- */
 .signup-text{
     margin-top:18px;
     text-align:center;
@@ -108,7 +133,7 @@ body{
     text-decoration:underline;
 }
 
-/* ---------- ERROR / INFO ---------- */
+/* ---------- MESSAGE ---------- */
 .msg{
     margin-top:15px;
     text-align:center;
@@ -116,7 +141,7 @@ body{
     font-size:14px;
 }
 
-/* ---------- MEDIA QUERIES ---------- */
+/* ---------- MEDIA ---------- */
 @media(max-width:480px){
     .login-card{
         width:90%;
@@ -128,6 +153,11 @@ body{
 
 <body>
 
+<!-- 🔄 LOADER -->
+<div id="loader" class="loader-overlay">
+    <div class="loader"></div>
+</div>
+
 <div class="login-card">
     <h2>Login</h2>
 
@@ -136,7 +166,6 @@ body{
 
     <button type="button" class="btn" onclick="login()">LOGIN</button>
 
-    <!-- ✅ NEW USER SIGNUP LINK -->
     <div class="signup-text">
         New user? <span onclick="goToSignup()">Sign up</span>
     </div>
@@ -145,6 +174,13 @@ body{
 </div>
 
 <script>
+const loader = document.getElementById("loader");
+
+/* Hide loader after page load */
+window.onload = () => {
+    setTimeout(() => loader.style.display = "none", 600);
+};
+
 function login(){
     const username = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value.trim();
@@ -157,29 +193,31 @@ function login(){
         return;
     }
 
+    loader.style.display = "flex";
+
     fetch("https://loginstore-1.onrender.com/api/login/", {
         method:"POST",
         headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify({
-            username: username,
-            password: password
-        })
+        body: JSON.stringify({ username, password })
     })
     .then(res => res.json())
     .then(data => {
+        loader.style.display = "none";
+
         if(data.error){
             msg.innerText = data.error;
             return;
         }
+
         window.location.href = "./index1.html";
     })
     .catch(err => {
-        console.error("FETCH ERROR:", err);
+        loader.style.display = "none";
+        console.error(err);
         msg.innerText = "Backend not responding";
     });
 }
 
-/* ---------- SIGNUP REDIRECT ---------- */
 function goToSignup(){
     window.location.href = "./signup.html";
 }

@@ -36,6 +36,31 @@ body{
     100% { background-position: 0% 50%; }
 }
 
+/* ---------- LOADER ---------- */
+.loader-overlay{
+    position:fixed;
+    inset:0;
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(6px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.loader{
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    border:6px solid rgba(255,255,255,0.3);
+    border-top:6px solid #fff;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin{
+    to{ transform: rotate(360deg); }
+}
+
 /* ---------- GLASS CARD ---------- */
 .signup-box{
     width:380px;
@@ -50,14 +75,8 @@ body{
 }
 
 @keyframes fadeUp{
-    from{
-        opacity:0;
-        transform: translateY(40px);
-    }
-    to{
-        opacity:1;
-        transform: translateY(0);
-    }
+    from{ opacity:0; transform: translateY(40px); }
+    to{ opacity:1; transform: translateY(0); }
 }
 
 /* ---------- HEADING ---------- */
@@ -124,14 +143,8 @@ body{
 }
 
 @keyframes slideIn{
-    from{
-        opacity:0;
-        transform: translateX(60px);
-    }
-    to{
-        opacity:1;
-        transform: translateX(0);
-    }
+    from{ opacity:0; transform: translateX(60px); }
+    to{ opacity:1; transform: translateX(0); }
 }
 
 /* ---------- RESPONSIVE ---------- */
@@ -146,6 +159,11 @@ body{
 
 <body>
 
+<!-- 🔄 LOADER -->
+<div id="loader" class="loader-overlay">
+    <div class="loader"></div>
+</div>
+
 <div class="signup-box">
     <h2>Create Account</h2>
 
@@ -159,17 +177,24 @@ body{
 <div id="successMsg" class="success-popup">✅ Signup Successfully</div>
 
 <script>
+const loader = document.getElementById("loader");
+
+/* Hide loader after page load */
+window.onload = () => {
+    setTimeout(() => loader.style.display = "none", 600);
+};
+
 function signup() {
     let user = document.getElementById("username").value.trim();
     let email = document.getElementById("email").value.trim();
     let pwd = document.getElementById("password").value.trim();
 
-    console.log(user, email, pwd);
-
     if (!user || !email || !pwd) {
         alert("All fields required");
         return;
     }
+
+    loader.style.display = "flex";
 
     fetch("https://loginstore-1.onrender.com/api/signup/", {
         method: "POST",
@@ -182,20 +207,26 @@ function signup() {
     })
     .then(res => res.json())
     .then(data => {
+        loader.style.display = "none";
+
         if (data.error) {
             alert(data.error);
             return;
         }
 
-        let popup = document.getElementById("successMsg");
+        const popup = document.getElementById("successMsg");
         popup.style.display = "block";
 
         setTimeout(() => {
             popup.style.display = "none";
-            window.location.href = "./index.html";
-        }, 2000);
+            window.location.href = "./login.html";
+        }, 1000);
     })
-    .catch(err => console.error("Fetch error:", err));
+    .catch(err => {
+        loader.style.display = "none";
+        console.error(err);
+        alert("Backend not responding");
+    });
 }
 </script>
 

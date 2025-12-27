@@ -1,0 +1,82 @@
+
+
+/* =========================
+   GLOBAL
+========================= */
+
+
+/* =========================
+   FULL WIDTH AI TEXT BAR
+========================= */
+.ai-banner{
+    width:100%;
+    padding:22px 30px;
+    text-align:center;
+    cursor:pointer;
+
+    background: linear-gradient(135deg,
+        #00f2fe,
+        #7b2ff7,
+        #ff0080
+    );
+    background-size:300% 300%;
+    animation: glowMove 6s infinite linear;
+
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:0.5px;
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,0.6),
+        0 0 40px rgba(123,47,247,0.7);
+
+    transition: transform 0.3s ease;
+   
+}
+
+.ai-banner:hover{
+    transform: scale(1.01);
+}
+
+@keyframes glowMove{
+    0%{background-position:0%}
+    50%{background-position:100%}
+    100%{background-position:0%}
+}
+
+/* =========================
+   SUB TEXT
+========================= */
+.ai-sub{
+    display:block;
+    font-size:14px;
+    font-weight:500;
+    opacity:0.95;
+    margin-top:6px;
+}
+
+/* =========================
+   MEDIA QUERIES
+========================= */
+
+/* Tablets */
+@media(max-width:768px){
+    .ai-banner{
+        font-size:18px;
+        padding:20px;
+    }
+    .ai-sub{
+        font-size:13px;
+    }
+}
+
+/* Mobiles */
+@media(max-width:480px){
+    .ai-banner{
+        font-size:16px;
+        padding:18px 14px;
+    }
+    .ai-sub{
+        font-size:12px;
+    }
+}
